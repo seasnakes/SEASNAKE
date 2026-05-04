@@ -136,8 +136,9 @@
         display: flex;
         align-items: center;
         justify-self: start;
-        gap: 18px;
+        gap: 22px;
         min-width: 0;
+        min-height: 68px;
         transform: translateX(clamp(-10px, -1vw, -3px));
       }
 
@@ -148,9 +149,9 @@
       }
 
       .mini-serpent {
-        width: 48px;
-        height: 48px;
-        color: var(--accent-a);
+        width: 64px;
+        height: 64px;
+        color: var(--text);
         overflow: hidden;
       }
 
@@ -161,8 +162,8 @@
       }
 
       .brand-wordmark {
-        width: 210px;
-        height: 48px;
+        width: 238px;
+        height: 64px;
         color: var(--text);
       }
 
@@ -255,8 +256,8 @@
         grid-column: 2;
         grid-row: 1;
         justify-self: end;
-        width: 64px;
-        height: 58px;
+        width: 86px;
+        height: 68px;
         display: grid;
         place-items: center;
         border: 0;
@@ -290,8 +291,8 @@
 
       .motion-logo {
         position: relative;
-        width: 64px;
-        height: 48px;
+        width: 86px;
+        height: 64px;
         filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent-a) 45%, transparent));
       }
 
@@ -796,6 +797,17 @@
       .wordmark-horizontal-ai {
         color: currentColor;
         overflow: visible;
+      }
+
+      .nav .mini-serpent {
+        width: 72px;
+        height: 72px;
+        transform: translateY(6px);
+      }
+
+      .nav .brand-wordmark {
+        width: 238px;
+        height: 64px;
       }
 
       .serpent-ai-mark .serpent-line,
@@ -1535,19 +1547,31 @@
         }
 
         .brand-mini {
-          gap: 12px;
+          gap: 16px;
           align-self: center;
+          min-height: 60px;
           transform: translateX(-6px);
         }
 
         .mini-serpent {
-          width: 40px;
-          height: 40px;
+          width: 58px;
+          height: 58px;
         }
 
         .brand-wordmark {
           width: clamp(152px, 48vw, 210px);
-          height: 40px;
+          height: 58px;
+        }
+
+        .nav .mini-serpent {
+          width: 64px;
+          height: 64px;
+          transform: translateY(5px);
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(176px, 42vw, 226px);
+          height: 58px;
         }
 
         .section-head {
@@ -1587,13 +1611,13 @@
         }
 
         .motion-logo-link {
-          width: 52px;
-          height: 48px;
+          width: 78px;
+          height: 60px;
         }
 
         .motion-logo {
-          width: 42px;
-          height: 34px;
+          width: 78px;
+          height: 58px;
         }
 
         .hero {
@@ -1645,28 +1669,40 @@
         }
 
         .brand-mini {
-          gap: 8px;
+          gap: 10px;
+          min-height: 52px;
           transform: translateX(-3px);
         }
 
         .mini-serpent {
-          width: 34px;
-          height: 34px;
+          width: 50px;
+          height: 50px;
         }
 
         .brand-wordmark {
           width: clamp(124px, 46vw, 168px);
-          height: 34px;
+          height: 50px;
+        }
+
+        .nav .mini-serpent {
+          width: 56px;
+          height: 56px;
+          transform: translateY(4px);
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(138px, 46vw, 178px);
+          height: 50px;
         }
 
         .motion-logo-link {
-          width: 46px;
-          height: 42px;
+          width: 68px;
+          height: 52px;
         }
 
         .motion-logo {
-          width: 36px;
-          height: 30px;
+          width: 68px;
+          height: 50px;
         }
 
         .theme-switcher,
@@ -1705,7 +1741,7 @@
         }
 
         .nav {
-          grid-template-columns: 54px minmax(0, 1fr) 76px;
+          grid-template-columns: 68px minmax(0, 1fr) 82px;
           gap: 10px 8px;
           padding: 10px 0 14px;
         }
@@ -1718,8 +1754,8 @@
         .mini-serpent {
           grid-column: 1;
           grid-row: 1;
-          width: 44px;
-          height: 44px;
+          width: 58px;
+          height: 58px;
           align-self: center;
           justify-self: start;
           overflow: hidden;
@@ -1735,14 +1771,25 @@
 
         .brand-wordmark {
           width: clamp(176px, 50vw, 232px);
-          height: 44px;
+          height: 56px;
+        }
+
+        .nav .mini-serpent {
+          width: 64px;
+          height: 64px;
+          transform: translateY(5px);
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(176px, 50vw, 232px);
+          height: 56px;
         }
 
         .motion-logo-link {
           grid-column: 3;
           grid-row: 1;
-          width: 76px;
-          height: 60px;
+          width: 82px;
+          height: 62px;
           justify-self: end;
         }
 
@@ -1751,8 +1798,8 @@
         }
 
         .motion-logo {
-          width: 68px;
-          height: 52px;
+          width: 82px;
+          height: 60px;
         }
 
         .nav-controls {
@@ -1789,7 +1836,7 @@
         }
 
         .nav {
-          grid-template-columns: 44px minmax(0, 1fr) 64px;
+          grid-template-columns: 56px minmax(0, 1fr) 70px;
           gap: 8px 6px;
         }
 
@@ -1800,29 +1847,40 @@
         .mini-serpent {
           grid-column: 1;
           grid-row: 1;
-          width: 38px;
-          height: 38px;
+          width: 50px;
+          height: 50px;
         }
 
         .brand-wordmark {
           width: clamp(146px, 49vw, 176px);
-          height: 38px;
+          height: 48px;
+        }
+
+        .nav .mini-serpent {
+          width: 52px;
+          height: 52px;
+          transform: translateY(4px);
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(136px, 48vw, 166px);
+          height: 48px;
         }
 
         .motion-logo-link {
-          width: 64px;
-          height: 52px;
+          width: 70px;
+          height: 54px;
         }
 
         .motion-logo {
-          width: 58px;
-          height: 44px;
+          width: 70px;
+          height: 52px;
         }
       }
 
       @media (min-width: 561px) and (max-width: 900px) {
         .nav {
-          grid-template-columns: 58px minmax(0, 1fr) 86px;
+          grid-template-columns: 84px minmax(0, 1fr) 92px;
           align-items: center;
           gap: 12px 10px;
         }
@@ -1835,8 +1893,8 @@
         .mini-serpent {
           grid-column: 1;
           grid-row: 1;
-          width: 48px;
-          height: 48px;
+          width: 64px;
+          height: 64px;
           align-self: center;
           justify-self: start;
           overflow: hidden;
@@ -1852,14 +1910,25 @@
 
         .brand-wordmark {
           width: clamp(210px, 38vw, 288px);
-          height: 48px;
+          height: 62px;
+        }
+
+        .nav .mini-serpent {
+          width: 72px;
+          height: 72px;
+          transform: translateY(6px);
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(224px, 38vw, 288px);
+          height: 62px;
         }
 
         .motion-logo-link {
           grid-column: 3;
           grid-row: 1;
-          width: 86px;
-          height: 66px;
+          width: 92px;
+          height: 68px;
           justify-self: end;
         }
 
@@ -1868,8 +1937,8 @@
         }
 
         .motion-logo {
-          width: 76px;
-          height: 56px;
+          width: 92px;
+          height: 66px;
         }
 
         .nav-controls {
@@ -2084,7 +2153,7 @@
     <main class="page" id="top">
       <nav class="nav" aria-label="SEASNAKE VI sections">
         <div class="brand-mini">
-          <svg class="mini-serpent serpent-ai-mark" viewBox="50 40 220 238" aria-hidden="true">
+          <svg class="mini-serpent serpent-ai-mark" viewBox="60 48 190 218" aria-hidden="true">
             <use href="#seasnake-ai-serpent-mark" />
           </svg>
           <div class="brand-copy">
