@@ -125,11 +125,9 @@
         gap: 22px 28px;
         min-width: 0;
         margin-bottom: 34px;
-        position: sticky;
-        top: 0;
+        position: relative;
         z-index: 10;
         padding: 14px 0 18px;
-        backdrop-filter: blur(18px);
       }
 
       .brand-mini {
@@ -169,18 +167,19 @@
 
       .nav-controls {
         grid-column: 1 / -1;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 14px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        justify-content: stretch;
+        gap: 12px;
         min-width: 0;
-        flex-wrap: wrap;
+        width: 100%;
       }
 
       .theme-switcher {
         display: flex;
-        flex: 0 1 760px;
-        width: min(760px, 100%);
+        flex: none;
+        width: 100%;
         height: auto;
         min-height: 58px;
         align-self: start;
@@ -198,6 +197,7 @@
         display: flex;
         align-items: center;
         align-self: start;
+        justify-self: end;
         gap: 4px;
         padding: 4px;
         border: 1px solid var(--line);
@@ -1455,10 +1455,11 @@
 
         .nav-controls {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-columns: minmax(0, 1fr);
           width: 100%;
           align-items: start;
           justify-content: stretch;
+          gap: 12px;
         }
 
         .theme-switcher {
@@ -1520,6 +1521,7 @@
 
         .mode-switcher {
           grid-column: 1;
+          justify-self: end;
           width: max-content;
         }
 
@@ -1600,6 +1602,7 @@
         .mode-switcher {
           grid-column: 1;
           align-self: flex-start;
+          justify-self: end;
           width: max-content;
         }
 
@@ -1826,6 +1829,7 @@
         }
 
         .mode-switcher {
+          justify-self: end;
           width: max-content;
         }
       }
