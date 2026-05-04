@@ -33,6 +33,9 @@
         --accent-a: #d9f01a;
         --accent-b: #bcc94e;
         --accent-c: #e2f072;
+        --accent-a-rgb: 217, 240, 26;
+        --accent-b-rgb: 188, 201, 78;
+        --accent-c-rgb: 226, 240, 114;
         --accent-glow: rgba(217, 240, 26, .28);
         --acid-a: #d9f01a;
         --acid-b: #bcc94e;
@@ -405,7 +408,7 @@
       body[data-mode="light"] .theme-button[aria-pressed="true"],
       body[data-mode="light"] .mode-button[aria-pressed="true"] {
         color: #070909;
-        background: linear-gradient(90deg, #d9f01a, #bcc94e, #e2f072);
+        background: linear-gradient(90deg, var(--accent-a), var(--accent-b), var(--accent-c));
       }
 
       @media (hover: none), (pointer: coarse), (max-width: 720px) {
@@ -422,15 +425,24 @@
         }
 
         body[data-mode="light"] .motion-logo-link::before {
-          background: rgba(217, 240, 26, .16);
+          background: rgba(var(--accent-a-rgb), .16);
           opacity: .16;
         }
 
         body[data-mode="light"] .hero-symbol-panel,
         body[data-mode="light"] .side-copy {
           background:
+            radial-gradient(circle at 16% 8%, rgba(var(--accent-a-rgb), .2), transparent 36%),
+            radial-gradient(circle at 92% 100%, rgba(var(--accent-c-rgb), .16), transparent 38%),
             linear-gradient(135deg, rgba(255, 255, 255, .9), rgba(239, 241, 231, .9)),
             #fbfbf5;
+        }
+
+        body[data-mode="light"] .side-copy {
+          border-color: rgba(var(--accent-a-rgb), .32);
+          box-shadow:
+            inset 0 0 0 1px rgba(7, 9, 9, .035),
+            inset 0 0 80px rgba(var(--accent-a-rgb), .1);
         }
       }
 
@@ -1443,13 +1455,13 @@
 
       .banner-serpent {
         position: absolute;
-        z-index: 1;
-        right: 24px;
-        bottom: 16px;
-        width: 92px;
-        color: var(--ink);
-        opacity: .22;
-        transform: rotate(-7deg);
+        z-index: 0;
+        left: 50%;
+        top: 52%;
+        width: 118px;
+        color: var(--accent-a);
+        opacity: .18;
+        transform: translate(-50%, -50%) rotate(-7deg);
       }
 
       .clearspace {
@@ -2846,7 +2858,7 @@
 
           <article class="application">
             <h3>浏览器 / 横幅背景</h3>
-            <p>三角主标从两侧裁切进入，中间保留内容区域；蛇形符号作为低透明度暗纹嵌入边角，颜色随当前角色切换。</p>
+            <p>三角主标从两侧裁切进入，中间保留内容区域；蛇形符号居中作为低透明度暗纹，颜色随当前角色切换。</p>
             <div class="banner">
               <svg class="wallpaper-snake left logo-triangle" viewBox="0 0 826.87 618.54" aria-hidden="true"><use href="#seasnake-word-triangle" /></svg>
               <svg class="wallpaper-snake right logo-triangle" viewBox="0 0 826.87 618.54" aria-hidden="true"><use href="#seasnake-word-triangle" /></svg>
@@ -2916,10 +2928,22 @@
         root.style.setProperty("--accent-a", colors[0]);
         root.style.setProperty("--accent-b", colors[1]);
         root.style.setProperty("--accent-c", colors[2]);
+        root.style.setProperty("--accent-a-rgb", hexToRgbTriplet(colors[0]));
+        root.style.setProperty("--accent-b-rgb", hexToRgbTriplet(colors[1]));
+        root.style.setProperty("--accent-c-rgb", hexToRgbTriplet(colors[2]));
         root.style.setProperty("--accent-glow", colors[3]);
         themeButtons.forEach((button) => {
           button.setAttribute("aria-pressed", String(button.dataset.theme === key));
         });
+      }
+
+      function hexToRgbTriplet(hex) {
+        const normalized = hex.replace("#", "");
+        const value = normalized.length === 3
+          ? normalized.split("").map((part) => part + part).join("")
+          : normalized;
+        const number = Number.parseInt(value, 16);
+        return `${(number >> 16) & 255}, ${(number >> 8) & 255}, ${number & 255}`;
       }
 
       function setMode(mode) {
