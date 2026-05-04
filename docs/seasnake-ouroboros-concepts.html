@@ -1955,6 +1955,190 @@
         }
       }
 
+      .nav {
+        grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr);
+        align-items: center;
+        gap: 34px 36px;
+        margin-bottom: 56px;
+        padding: 30px 0 0;
+      }
+
+      .brand-mini {
+        display: contents;
+        min-height: 0;
+        transform: none;
+      }
+
+      .nav .mini-serpent {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        align-self: center;
+        width: 112px;
+        height: 112px;
+        color: var(--text);
+        overflow: visible;
+        transform: none;
+      }
+
+      .nav .brand-copy {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: center;
+        justify-content: center;
+        min-width: 0;
+      }
+
+      .nav .brand-wordmark {
+        width: clamp(300px, 28vw, 430px);
+        height: auto;
+        max-height: 118px;
+      }
+
+      .motion-logo-link {
+        grid-column: 3;
+        grid-row: 1;
+        width: 124px;
+        height: 110px;
+      }
+
+      .motion-logo-link::before {
+        inset: 0 8px;
+      }
+
+      .motion-logo {
+        width: 124px;
+        height: 96px;
+      }
+
+      .nav-controls {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 28px;
+        width: 100%;
+      }
+
+      .theme-switcher {
+        width: 100%;
+        min-height: 74px;
+      }
+
+      .mode-switcher {
+        justify-self: end;
+        align-self: stretch;
+        min-height: 74px;
+      }
+
+      .mode-button {
+        width: 62px;
+        height: 62px;
+      }
+
+      @media (max-width: 900px) {
+        .nav {
+          grid-template-columns: 86px minmax(0, 1fr) 92px;
+          gap: 18px 10px;
+          margin-bottom: 42px;
+          padding-top: 18px;
+        }
+
+        .nav .mini-serpent {
+          width: 84px;
+          height: 84px;
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(188px, 42vw, 286px);
+          max-height: 82px;
+        }
+
+        .motion-logo-link {
+          width: 88px;
+          height: 78px;
+        }
+
+        .motion-logo {
+          width: 88px;
+          height: 68px;
+        }
+
+        .nav-controls {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .theme-switcher {
+          min-height: 56px;
+        }
+
+        .mode-switcher {
+          justify-self: end;
+          align-self: start;
+          min-height: auto;
+        }
+
+        .mode-button {
+          width: 46px;
+          height: 46px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav {
+          grid-template-columns: 68px minmax(0, 1fr) 76px;
+          gap: 14px 8px;
+        }
+
+        .nav .mini-serpent {
+          width: 66px;
+          height: 66px;
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(154px, 47vw, 220px);
+          max-height: 64px;
+        }
+
+        .motion-logo-link {
+          width: 74px;
+          height: 64px;
+        }
+
+        .motion-logo {
+          width: 74px;
+          height: 56px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .nav {
+          grid-template-columns: 58px minmax(0, 1fr) 66px;
+        }
+
+        .nav .mini-serpent {
+          width: 56px;
+          height: 56px;
+        }
+
+        .nav .brand-wordmark {
+          width: clamp(128px, 46vw, 168px);
+          max-height: 54px;
+        }
+
+        .motion-logo-link {
+          width: 64px;
+          height: 56px;
+        }
+
+        .motion-logo {
+          width: 64px;
+          height: 48px;
+        }
+      }
+
       @keyframes manualArrivalOverlay {
         0% {
           opacity: 1;
