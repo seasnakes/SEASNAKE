@@ -30,10 +30,10 @@
         --red-b: #c41f4d;
         --red-c: #f26089;
         --red-glow: rgba(241, 38, 95, .28);
-        --accent-a: #22c6c5;
-        --accent-b: #1da4ab;
-        --accent-c: #6dd5de;
-        --accent-glow: rgba(34, 198, 197, .28);
+        --accent-a: #d9f01a;
+        --accent-b: #bcc94e;
+        --accent-c: #e2f072;
+        --accent-glow: rgba(217, 240, 26, .28);
         --acid-a: #d9f01a;
         --acid-b: #bcc94e;
         --acid-c: #e2f072;
@@ -73,14 +73,14 @@
         --paper: #fbfbf5;
         --paper-soft: #eef0e8;
         --text: #080b0a;
-        --muted: rgba(7, 9, 9, .62);
-        --muted-strong: rgba(7, 9, 9, .78);
-        --line: rgba(7, 9, 9, .16);
-        --line-dark: rgba(7, 9, 9, .14);
+        --muted: rgba(7, 9, 9, .72);
+        --muted-strong: rgba(7, 9, 9, .86);
+        --line: rgba(7, 9, 9, .22);
+        --line-dark: rgba(7, 9, 9, .18);
         background:
-          radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent-a) 18%, transparent), transparent 24vw),
-          radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent-c) 15%, transparent), transparent 30vw),
-          linear-gradient(180deg, rgba(255, 255, 255, .88), transparent 560px),
+          radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent-a) 12%, transparent), transparent 24vw),
+          radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent-c) 9%, transparent), transparent 30vw),
+          linear-gradient(180deg, rgba(255, 255, 255, .72), transparent 560px),
           var(--black);
       }
 
@@ -300,35 +300,35 @@
       }
 
       body[data-mode="light"] .theme-switcher {
-        border-color: rgba(7, 9, 9, .13);
+        border-color: rgba(7, 9, 9, .18);
         background:
-          linear-gradient(180deg, rgba(255, 255, 255, .86), rgba(255, 255, 255, .62)),
-          color-mix(in srgb, var(--accent-a) 9%, var(--paper));
-        box-shadow: 0 16px 44px rgba(7, 9, 9, .08);
+          linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(247, 248, 238, .74)),
+          color-mix(in srgb, var(--accent-a) 6%, var(--paper));
+        box-shadow: 0 14px 38px rgba(7, 9, 9, .07);
       }
 
       body[data-mode="light"] .theme-button,
       body[data-mode="light"] .mode-button {
-        color: rgba(7, 9, 9, .56);
+        color: rgba(7, 9, 9, .58);
       }
 
       body[data-mode="light"] .theme-button[aria-pressed="true"] {
-        color: #fbfbf5;
-        text-shadow: 0 1px 12px rgba(7, 9, 9, .18);
+        color: #070909;
+        text-shadow: none;
       }
 
       body[data-mode="light"] .mode-switcher {
-        border-color: rgba(7, 9, 9, .14);
+        border-color: rgba(7, 9, 9, .18);
         background:
-          linear-gradient(180deg, rgba(255, 255, 255, .78), rgba(255, 255, 255, .52)),
-          rgba(251, 251, 245, .72);
-        box-shadow: 0 16px 44px rgba(7, 9, 9, .08);
+          linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(247, 248, 238, .74)),
+          color-mix(in srgb, var(--accent-a) 6%, var(--paper));
+        box-shadow: 0 14px 38px rgba(7, 9, 9, .07);
       }
 
       body[data-mode="light"] .mode-button[aria-pressed="true"] {
-        color: #fbfbf5;
+        color: #070909;
         background:
-          linear-gradient(135deg, #101716, #243534);
+          linear-gradient(90deg, var(--accent-a), var(--accent-b), var(--accent-c));
       }
 
       body[data-mode="light"] .motion-logo-link {
@@ -339,6 +339,99 @@
         background:
           radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--accent-a) 16%, transparent), transparent 62%);
         opacity: .28;
+      }
+
+      body[data-mode="light"] .hero-symbol-panel,
+      body[data-mode="light"] .side-copy {
+        color: var(--ink);
+        border-color: rgba(7, 9, 9, .22);
+        background:
+          radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--accent-a) 16%, transparent), transparent 32%),
+          radial-gradient(circle at 82% 78%, color-mix(in srgb, var(--accent-b) 10%, transparent), transparent 34%),
+          linear-gradient(135deg, rgba(255, 255, 255, .72), rgba(239, 241, 231, .88)),
+          var(--paper);
+        box-shadow: inset 0 0 0 1px rgba(7, 9, 9, .035);
+      }
+
+      body[data-mode="light"] .hero-symbol-panel::after {
+        border-color: rgba(7, 9, 9, .07);
+        background:
+          linear-gradient(90deg, transparent 0 49.8%, rgba(7, 9, 9, .055) 50%, transparent 50.2%),
+          linear-gradient(180deg, transparent 0 49.8%, rgba(7, 9, 9, .05) 50%, transparent 50.2%);
+        opacity: .62;
+      }
+
+      body[data-mode="light"] .hero-snake-corner,
+      body[data-mode="light"] .hero-panel-wordmark {
+        color: #070909;
+        filter: drop-shadow(0 14px 34px color-mix(in srgb, var(--accent-a) 24%, transparent));
+      }
+
+      body[data-mode="light"] .hero-intro-triangle {
+        color: #070909;
+        opacity: .12;
+      }
+
+      body[data-mode="light"] .side-copy .lead,
+      body[data-mode="light"] .note span {
+        color: rgba(7, 9, 9, .72);
+      }
+
+      body[data-mode="light"] .note {
+        border-top-color: rgba(7, 9, 9, .14);
+      }
+
+      body[data-mode="light"] .nav .mini-serpent,
+      body[data-mode="light"] .nav .brand-wordmark,
+      body[data-mode="light"] .motion-logo,
+      body[data-mode="light"] .hero-snake-corner,
+      body[data-mode="light"] .hero-panel-wordmark {
+        color: #070909;
+      }
+
+      body[data-mode="light"] .motion-logo,
+      body[data-mode="light"] .hero-snake-corner,
+      body[data-mode="light"] .hero-panel-wordmark {
+        filter: none;
+      }
+
+      body[data-mode="light"] .theme-switcher,
+      body[data-mode="light"] .mode-switcher {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(247, 248, 238, .86)),
+          #fbfbf5;
+      }
+
+      body[data-mode="light"] .theme-button[aria-pressed="true"],
+      body[data-mode="light"] .mode-button[aria-pressed="true"] {
+        color: #070909;
+        background: linear-gradient(90deg, #d9f01a, #bcc94e, #e2f072);
+      }
+
+      @media (hover: none), (pointer: coarse), (max-width: 720px) {
+        body[data-mode="light"] .nav .mini-serpent,
+        body[data-mode="light"] .nav .brand-wordmark,
+        body[data-mode="light"] .motion-logo,
+        body[data-mode="light"] .hero-snake-corner,
+        body[data-mode="light"] .hero-panel-wordmark,
+        body[data-mode="light"] .side-copy,
+        body[data-mode="light"] .side-copy .lead,
+        body[data-mode="light"] .note span {
+          color: #070909;
+          text-shadow: none;
+        }
+
+        body[data-mode="light"] .motion-logo-link::before {
+          background: rgba(217, 240, 26, .16);
+          opacity: .16;
+        }
+
+        body[data-mode="light"] .hero-symbol-panel,
+        body[data-mode="light"] .side-copy {
+          background:
+            linear-gradient(135deg, rgba(255, 255, 255, .9), rgba(239, 241, 231, .9)),
+            #fbfbf5;
+        }
       }
 
       .eyebrow {
@@ -2370,8 +2463,8 @@
         </a>
         <div class="nav-controls">
           <div class="theme-switcher" aria-label="色系切换">
-            <button class="theme-button" type="button" data-theme="cyan" aria-pressed="true">青蓝</button>
-            <button class="theme-button" type="button" data-theme="acid" aria-pressed="false">竹叶</button>
+            <button class="theme-button" type="button" data-theme="cyan" aria-pressed="false">青蓝</button>
+            <button class="theme-button" type="button" data-theme="acid" aria-pressed="true">竹叶</button>
             <button class="theme-button" type="button" data-theme="rose" aria-pressed="false">赤练</button>
           </div>
           <div class="mode-switcher" aria-label="明暗模式">
@@ -2818,7 +2911,7 @@
       }
 
       function setTheme(key) {
-        const colors = themes[key] || themes.cyan;
+        const colors = themes[key] || themes.acid;
         document.body.dataset.theme = key;
         root.style.setProperty("--accent-a", colors[0]);
         root.style.setProperty("--accent-b", colors[1]);
@@ -2845,7 +2938,7 @@
         button.addEventListener("click", () => setMode(button.dataset.mode));
       });
 
-      setTheme("cyan");
+      setTheme("acid");
       setMode("dark");
 
     </script>

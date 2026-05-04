@@ -10,12 +10,12 @@
         --paper: #000;
         --muted: rgba(255, 255, 255, 0.56);
         --hairline: rgba(255, 255, 255, 0.18);
-        --accent-a: #22c6c5;
-        --accent-b: #1da4ab;
-        --accent-c: #6dd5de;
-        --logo-accent-a: #22c6c5;
-        --logo-accent-c: #6dd5de;
-        --logo-color: #bceef2;
+        --accent-a: #d9f01a;
+        --accent-b: #bcc94e;
+        --accent-c: #e2f072;
+        --logo-accent-a: #d9f01a;
+        --logo-accent-c: #d9f01a;
+        --logo-color: #f2fac1;
         --logo-wrap-glow: 34%;
         --logo-glow-strength: 46%;
         --logo-white-glow: 12%;
@@ -895,7 +895,7 @@
     </div>
     <div class="theme-switcher" aria-label="Current color theme">
       <div class="theme-strip" aria-hidden="true"></div>
-      <button class="theme-button" type="button" data-theme-index="0" aria-label="滚动切换色系" aria-pressed="true"><span id="theme-label">青蓝</span></button>
+      <button class="theme-button" type="button" data-theme-index="0" aria-label="滚动切换色系" aria-pressed="true"><span id="theme-label">竹叶</span></button>
     </div>
     <aside class="config-panel" id="config-panel" data-open="false" aria-label="SEASNAKE visual tuning panel">
       <button class="config-toggle" id="config-toggle" type="button" aria-expanded="false" aria-controls="config-body">调参</button>
@@ -1116,8 +1116,8 @@
     <script>
       const BRAND_CONFIG = {
         themes: [
-          { key: "cyan", label: "青蓝", colors: ["#22C6C5", "#1DA4AB", "#6DD5DE"], logoColorIndex: 2 },
           { key: "acid", label: "竹叶", colors: ["#D9F01A", "#BCC94E", "#E2F072"], logoColorIndex: 0 },
+          { key: "cyan", label: "青蓝", colors: ["#22C6C5", "#1DA4AB", "#6DD5DE"], logoColorIndex: 2 },
           { key: "rose", label: "赤练", colors: ["#F1265F", "#C41F4D", "#F26089"], logoColorIndex: 2 },
         ],
         logo: {
