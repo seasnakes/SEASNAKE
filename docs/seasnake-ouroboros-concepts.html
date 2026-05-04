@@ -1116,6 +1116,10 @@
         gap: 16px;
       }
 
+      .color-strip + .lore-stack {
+        margin-top: 18px;
+      }
+
       .lore-card {
         --snake-color: var(--accent-a);
         --snake-glow: var(--accent-glow);
@@ -1275,6 +1279,26 @@
         color: var(--text);
       }
 
+      .matrix-sample.asset-tile {
+        min-width: 70px;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        color: var(--muted);
+      }
+
+      .matrix-sample.asset-tile img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        opacity: .96;
+        filter: invert(1);
+      }
+
+      body[data-mode="light"] .matrix-sample.asset-tile img {
+        filter: none;
+      }
+
       .matrix-sample .mark-128 {
         width: 128px;
       }
@@ -1305,6 +1329,22 @@
 
       .matrix-sample .word-76 {
         width: 76px;
+      }
+
+      .matrix-sample .combo-240 {
+        width: 240px;
+      }
+
+      .matrix-sample .combo-180 {
+        width: 180px;
+      }
+
+      .matrix-sample .combo-132 {
+        width: 132px;
+      }
+
+      .matrix-sample .combo-96 {
+        width: 96px;
       }
 
       .standards-grid {
@@ -1412,6 +1452,24 @@
       .avatar.accent {
         background: var(--accent-a);
         color: var(--ink);
+      }
+
+      .avatar.role-snake {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(var(--accent-a-rgb), .18), transparent 62%),
+          rgba(255, 255, 255, .035);
+        color: var(--accent-a);
+      }
+
+      .avatar.role-snake svg {
+        color: var(--accent-a);
+        filter: drop-shadow(0 0 18px rgba(var(--accent-a-rgb), .22));
+      }
+
+      body[data-mode="light"] .avatar.role-snake {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(var(--accent-a-rgb), .2), transparent 62%),
+          var(--paper);
       }
 
       .banner {
@@ -2525,7 +2583,7 @@
             </div>
             <div class="note">
               <strong>三蛇叙事</strong>
-              <span>上方竹叶青为本体，中间赤练为危险与爆发，下方青蓝树蟒为冷静与感知。</span>
+              <span>中间竹叶青为本体，向上进入青蓝树蟒，向下进入赤练。</span>
             </div>
           </div>
         </aside>
@@ -2597,59 +2655,6 @@
               <div class="rule"><b>关系</b>三角主标负责名称，蛇型符号负责气质，两者同场时主标优先。</div>
               <div class="rule"><b>色彩</b>默认黑白，进入三蛇叙事时分别继承竹叶青、赤练、青蓝树蟒。</div>
               <div class="rule"><b>比例</b>与三角主标同排时，蛇型符号高度建议为主标高度的 72%-82%。</div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="three-serpents">
-        <div class="section-head">
-          <h2>三条蛇的故事</h2>
-          <p>三套色系对应三种状态。最上方是竹叶青，是 SEASNAKE 的本体；中间是赤练，是危险和爆发；最下方是青蓝树蟒，是冷静、感知和数字化的一面。</p>
-        </div>
-        <div class="lore-stack">
-          <article class="lore-card" data-snake="bamboo">
-            <div class="lore-mark">
-              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
-            </div>
-            <div class="lore-copy">
-              <small>origin / bamboo viper</small>
-              <h3>竹叶青</h3>
-              <p>竹叶青是本体，也是整套人格的中心。它代表敏锐、隐蔽、判断和自我更新：不急着攻击，但始终保持距离、视线和节奏。</p>
-            </div>
-            <div class="lore-usage">
-              <b>使用场景</b>
-              <p>作为主叙事色使用在第一屏、高亮状态、关键按钮、个人签名和主视觉边缘光。</p>
-            </div>
-          </article>
-
-          <article class="lore-card" data-snake="red">
-            <div class="lore-mark">
-              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
-            </div>
-            <div class="lore-copy">
-              <small>flare / red chain</small>
-              <h3>赤练</h3>
-              <p>赤练是本体分化出的攻击形态。它更直接、更热、更危险，适合表达情绪爆发、冲突、舞台感和带有压迫性的画面。</p>
-            </div>
-            <div class="lore-usage">
-              <b>使用场景</b>
-              <p>用于海报、封面、警示态、夜间视觉、片头冲击帧和需要更强记忆点的周边包装。</p>
-            </div>
-          </article>
-
-          <article class="lore-card" data-snake="blue">
-            <div class="lore-mark">
-              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
-            </div>
-            <div class="lore-copy">
-              <small>sensor / blue tree python</small>
-              <h3>青蓝树蟒</h3>
-              <p>青蓝树蟒是本体的感知形态。它贴近数字界面、光线、水面和屏幕，代表冷静、观察、编辑、计算和长时间潜伏。</p>
-            </div>
-            <div class="lore-usage">
-              <b>使用场景</b>
-              <p>用于网页背景、UI、动态图层、数据界面、预览页和偏科技感的内容输出。</p>
             </div>
           </article>
         </div>
@@ -2741,7 +2746,7 @@
       <section class="section" id="logo-size-system">
         <div class="section-head">
           <h2>常用尺寸系统</h2>
-          <p>三种核心标识统一为单色线条输出。尺寸展示以实际使用场景为准：主标和蛇形标按正方形图标尺寸管理，横版字标按宽度管理。</p>
+          <p>核心标识统一为单色线条输出。尺寸展示以实际使用场景为准：主标和蛇形标按图标尺寸管理，横版字标和组合标按宽度管理。</p>
         </div>
         <div class="size-matrix">
           <article class="size-row">
@@ -2782,6 +2787,19 @@
               <div class="matrix-sample"><svg class="serpent-ai-mark mark-40" viewBox="0 0 310 320"><use href="#seasnake-ai-serpent-mark" /></svg><span>40px</span></div>
             </div>
           </article>
+
+          <article class="size-row">
+            <header>
+              <b>Snake + two-row wordmark</b>
+              <span>蛇形加两排文字用于展板、片头、包装侧标和宽比例视觉，按宽度输出。</span>
+            </header>
+            <div class="size-samples">
+              <div class="matrix-sample asset-tile"><img class="combo-240" src="assets/logo-system/svg/seasnake-logo-snake-two-row.svg" alt="" /><span>240w</span></div>
+              <div class="matrix-sample asset-tile"><img class="combo-180" src="assets/logo-system/svg/seasnake-logo-snake-two-row.svg" alt="" /><span>180w</span></div>
+              <div class="matrix-sample asset-tile"><img class="combo-132" src="assets/logo-system/svg/seasnake-logo-snake-two-row.svg" alt="" /><span>132w</span></div>
+              <div class="matrix-sample asset-tile"><img class="combo-96" src="assets/logo-system/svg/seasnake-logo-snake-two-row.svg" alt="" /><span>96w</span></div>
+            </div>
+          </article>
         </div>
 
         <div class="standards-grid">
@@ -2793,8 +2811,8 @@
 
       <section class="section" id="color-system">
         <div class="section-head">
-          <h2>三套色系</h2>
-          <p>色彩从功能配色升级为角色叙事。三角主标默认保持黑白骨架，三色进入背景、边缘光、UI、故事章节和重点高亮。</p>
+          <h2>三蛇色系</h2>
+          <p>三套色系对应三种状态：竹叶青是本体，青蓝树蟒是感知，赤练是爆发。颜色进入背景、边缘光、UI 和故事章节，不直接覆盖正式主标。</p>
         </div>
         <div class="color-strip">
           <article class="palette">
@@ -2819,6 +2837,53 @@
               <h3>赤练</h3>
               <p>中层爆发形态。用于强情绪海报、夜间视觉、周边包装或需要更危险感的场景。</p>
               <div class="hex-list"><span>#F1265F</span><span>#C41F4D</span><span>#F26089</span></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="lore-stack">
+          <article class="lore-card" data-snake="bamboo">
+            <div class="lore-mark">
+              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
+            </div>
+            <div class="lore-copy">
+              <small>origin / bamboo viper</small>
+              <h3>竹叶青</h3>
+              <p>本体色，代表敏锐、隐蔽、判断和自我更新。它用于默认状态、高亮按钮、个人签名和主视觉边缘光。</p>
+            </div>
+            <div class="lore-usage">
+              <b>使用场景</b>
+              <p>第一屏、默认角色、主按钮、标题光感和正式视觉里的记忆点。</p>
+            </div>
+          </article>
+
+          <article class="lore-card" data-snake="blue">
+            <div class="lore-mark">
+              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
+            </div>
+            <div class="lore-copy">
+              <small>sensor / blue tree python</small>
+              <h3>青蓝树蟒</h3>
+              <p>感知形态，贴近数字界面、光线、水面和屏幕。它代表冷静、观察、编辑、计算和长时间潜伏。</p>
+            </div>
+            <div class="lore-usage">
+              <b>使用场景</b>
+              <p>网页背景、UI、动态图层、数据界面、预览页和偏科技感内容。</p>
+            </div>
+          </article>
+
+          <article class="lore-card" data-snake="red">
+            <div class="lore-mark">
+              <svg class="serpent-ai-mark" viewBox="0 0 310 320" aria-hidden="true"><use href="#seasnake-ai-serpent-mark" /></svg>
+            </div>
+            <div class="lore-copy">
+              <small>flare / red chain</small>
+              <h3>赤练</h3>
+              <p>爆发形态，更直接、更热、更危险。它用于表达情绪爆发、冲突、舞台感和压迫性的画面。</p>
+            </div>
+            <div class="lore-usage">
+              <b>使用场景</b>
+              <p>海报、封面、警示态、夜间视觉、片头冲击帧和周边包装。</p>
             </div>
           </article>
         </div>
@@ -2852,7 +2917,7 @@
               <div class="avatar paper"><svg class="logo-triangle" viewBox="0 0 826.87 618.54"><use href="#seasnake-word-triangle" /></svg></div>
               <div class="avatar accent"><svg class="logo-triangle" viewBox="0 0 826.87 618.54"><use href="#seasnake-word-triangle" /></svg></div>
               <div class="avatar"><svg class="logo-triangle" viewBox="0 0 826.87 618.54"><use href="#seasnake-word-triangle" /></svg></div>
-              <div class="avatar paper"><svg class="serpent-ai-mark" viewBox="0 0 310 320"><use href="#seasnake-ai-serpent-mark" /></svg></div>
+              <div class="avatar role-snake"><svg class="serpent-ai-mark" viewBox="0 0 310 320"><use href="#seasnake-ai-serpent-mark" /></svg></div>
             </div>
           </article>
 

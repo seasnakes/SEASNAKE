@@ -44,6 +44,7 @@
       .bg-canvas {
         position: fixed;
         inset: 0;
+        z-index: 0;
         width: 100%;
         height: 100%;
         background: #000;
@@ -59,13 +60,16 @@
       }
 
       .stage {
-        position: sticky;
-        top: 0;
-        min-height: 100vh;
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        min-height: 100dvh;
         width: min(920px, 100%);
         margin: 0 auto;
+        padding: 0 32px;
         display: grid;
         place-items: center;
+        pointer-events: none;
       }
 
       .logo-wrap {
@@ -182,30 +186,6 @@
         animation: spreadOut 0.92s cubic-bezier(0.16, 0.86, 0.18, 1) var(--delay) both;
       }
 
-      .caption {
-        position: absolute;
-        left: 50%;
-        bottom: 36px;
-        transform: translateX(-50%);
-        width: min(760px, 100%);
-        margin: 28px auto 0;
-        padding-top: 18px;
-        border-top: 1px solid var(--hairline);
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.5;
-        letter-spacing: 0;
-      }
-
-      .caption strong {
-        color: var(--ink);
-        font-size: 12px;
-        font-weight: 700;
-      }
-
       .theme-switcher {
         position: fixed;
         z-index: 2;
@@ -301,8 +281,8 @@
         top: 28px;
         display: grid;
         gap: 2px;
-        min-width: 118px;
-        padding: 12px 14px 11px;
+        min-width: 84px;
+        padding: 11px 13px 10px;
         border: 1px solid color-mix(in srgb, var(--accent-c) 34%, rgba(255, 255, 255, 0.14));
         background:
           linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.018)),
@@ -344,6 +324,24 @@
 
       .manual-link-mobile {
         display: none;
+      }
+
+      .brand-signature {
+        position: fixed;
+        left: 30px;
+        bottom: 28px;
+        z-index: 2;
+        color: color-mix(in srgb, var(--accent-c) 38%, #fff);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        line-height: 1;
+        text-transform: uppercase;
+        text-shadow:
+          0 0 20px color-mix(in srgb, var(--accent-c) 24%, transparent),
+          0 1px 14px rgba(0, 0, 0, 0.58);
+        pointer-events: none;
+        transition: color 220ms ease, text-shadow 220ms ease, opacity 220ms ease;
       }
 
       .manual-transition {
@@ -425,7 +423,7 @@
       body.is-bridge-leaving .manual-link,
       body.is-bridge-leaving .theme-switcher,
       body.is-bridge-leaving .config-panel,
-      body.is-bridge-leaving .caption {
+      body.is-bridge-leaving .brand-signature {
         opacity: 0;
         transition: opacity 260ms ease;
       }
@@ -808,23 +806,12 @@
         }
       }
 
-      @media (max-width: 860px) {
-        .caption {
-          left: 32px;
-          right: 112px;
-          width: auto;
-          transform: none;
-          display: block;
-        }
-
-        .caption span {
-          display: block;
-          margin-top: 6px;
-        }
-      }
-
       @media (max-width: 720px) {
         main {
+          padding: 0 22px;
+        }
+
+        .stage {
           padding: 0 22px;
         }
 
@@ -855,6 +842,12 @@
           bottom: 16px;
         }
 
+        .brand-signature {
+          left: 16px;
+          bottom: 24px;
+          font-size: 12px;
+        }
+
         .config-body {
           max-height: calc(100vh - 32px);
         }
@@ -863,10 +856,12 @@
           grid-template-columns: 78px 1fr 38px;
         }
 
-        .caption {
-          left: 22px;
-          right: 96px;
-          bottom: 24px;
+        .stage {
+          min-height: 100dvh;
+        }
+
+        .logo-wrap {
+          transform: none;
         }
       }
     </style>
@@ -874,13 +869,12 @@
   <body>
     <canvas class="bg-canvas" id="bg-canvas"></canvas>
     <a class="manual-link manual-link-mobile" href="./seasnake-ouroboros-concepts.html?from=preview#top" aria-label="从动态预览进入 SEASNAKE VI 文档">
-      <span>VI 手册</span>
-      <small>Brand Manual</small>
+      <span>MANUAL</span>
     </a>
     <a class="manual-link" href="./seasnake-ouroboros-concepts.html?from=preview#top" data-manual-link aria-label="从动态预览进入 SEASNAKE VI 文档">
-      <span>VI 手册</span>
-      <small>Brand Manual</small>
+      <span>MANUAL</span>
     </a>
+    <div class="brand-signature" aria-hidden="true">SEA SNAKE</div>
     <div class="manual-transition" aria-hidden="true">
       <svg viewBox="0 0 826.87 618.54" focusable="false">
         <path pathLength="1" style="--bridge-delay:80ms" d="M419.44 36 L790.87 582.54 L36 582.54 Z" />
@@ -895,7 +889,7 @@
     </div>
     <div class="theme-switcher" aria-label="Current color theme">
       <div class="theme-strip" aria-hidden="true"></div>
-      <button class="theme-button" type="button" data-theme-index="0" aria-label="滚动切换色系" aria-pressed="true"><span id="theme-label">竹叶</span></button>
+      <button class="theme-button" type="button" data-theme-index="1" aria-label="滚动切换色系" aria-pressed="true"><span id="theme-label">竹叶</span></button>
     </div>
     <aside class="config-panel" id="config-panel" data-open="false" aria-label="SEASNAKE visual tuning panel">
       <button class="config-toggle" id="config-toggle" type="button" aria-expanded="false" aria-controls="config-body">调参</button>
@@ -1043,25 +1037,14 @@
           </label>
         </section>
 
-        <section class="config-section" aria-label="Caption controls">
-          <h2>底部文字</h2>
-          <label class="control-row control-wide">
-            <span>标题</span>
-            <input id="caption-title-input" type="text" />
-          </label>
-          <label class="control-row control-wide">
-            <span>说明</span>
-            <input id="caption-detail-input" type="text" />
-          </label>
-          <p class="config-note">参数实时生效。打开控制台也可以直接看 window.SEASNAKE_CONFIG。</p>
-        </section>
+        <p class="config-note">参数实时生效。打开控制台也可以直接看 window.SEASNAKE_CONFIG。</p>
       </div>
     </aside>
-    <main>
-      <section class="stage" aria-label="SEASNAKE logo animation preview">
+    <main aria-hidden="true"></main>
+    <section class="stage" aria-label="SEASNAKE logo animation preview">
         <div class="logo-wrap">
           <svg class="seasnake-logo" viewBox="0 0 826.87 618.54" role="img" aria-labelledby="seasnakeTitle" xmlns="http://www.w3.org/2000/svg">
-            <title id="seasnakeTitle">SEASNAKE final black logo</title>
+            <title id="seasnakeTitle">SEASNAKE logo</title>
             <defs>
               <filter id="single-layer-fuse" x="-16%" y="-16%" width="132%" height="132%" color-interpolation-filters="sRGB">
                 <feMorphology in="SourceAlpha" operator="dilate" radius="0.85" result="expanded" />
@@ -1107,17 +1090,12 @@
             </g>
           </svg>
         </div>
-        <div class="caption">
-          <strong id="caption-title">SEASNAKE / final black stroke system</strong>
-          <span id="caption-detail">16 logo strokes only. Extra helper lines are excluded.</span>
-        </div>
-      </section>
-    </main>
+    </section>
     <script>
       const BRAND_CONFIG = {
         themes: [
-          { key: "acid", label: "竹叶", colors: ["#D9F01A", "#BCC94E", "#E2F072"], logoColorIndex: 0 },
           { key: "cyan", label: "青蓝", colors: ["#22C6C5", "#1DA4AB", "#6DD5DE"], logoColorIndex: 2 },
+          { key: "acid", label: "竹叶", colors: ["#D9F01A", "#BCC94E", "#E2F072"], logoColorIndex: 0 },
           { key: "rose", label: "赤练", colors: ["#F1265F", "#C41F4D", "#F26089"], logoColorIndex: 2 },
         ],
         logo: {
@@ -1144,13 +1122,9 @@
           speed: 0.9,
           scrollPower: 1.15,
           manualProgress: false,
-          progress: 0,
+          progress: 0.5,
           backgroundProgress: 0,
           paused: false,
-        },
-        caption: {
-          title: "SEASNAKE / final black stroke system",
-          detail: "16 logo strokes only. Extra helper lines are excluded.",
         },
       };
 
@@ -1167,10 +1141,6 @@
       const configReset = document.getElementById("config-reset");
       const themeSelect = document.getElementById("control-theme");
       const bgShapeSelect = document.getElementById("bg-shape");
-      const captionTitle = document.getElementById("caption-title");
-      const captionDetail = document.getElementById("caption-detail");
-      const captionTitleInput = document.getElementById("caption-title-input");
-      const captionDetailInput = document.getElementById("caption-detail-input");
       const logoFuseFlood = document.getElementById("logo-fuse-flood");
       const colorInputs = [
         document.getElementById("color-a"),
@@ -1246,10 +1216,13 @@
         root.style.setProperty(name, value);
       }
 
-      function setTextIfChanged(element, value) {
-        if (element.textContent !== value) {
-          element.textContent = value;
-        }
+      function progressForThemeIndex(index) {
+        return index / Math.max(1, config.themes.length - 1);
+      }
+
+      function defaultThemeProgress() {
+        const defaultIndex = Math.max(0, config.themes.findIndex((theme) => theme.key === "acid"));
+        return progressForThemeIndex(defaultIndex);
       }
 
       function activeIndexForProgress(progress) {
@@ -1540,12 +1513,6 @@
         setControlValue("bg-progress", config.motion.backgroundProgress.toFixed(3), config.motion.backgroundProgress.toFixed(3));
         document.getElementById("manual-progress").checked = config.motion.manualProgress;
         document.getElementById("pause-motion").checked = config.motion.paused;
-        if (document.activeElement !== captionTitleInput) {
-          captionTitleInput.value = config.caption.title;
-        }
-        if (document.activeElement !== captionDetailInput) {
-          captionDetailInput.value = config.caption.detail;
-        }
       }
 
       function applyVisualState({ syncUi = false } = {}) {
@@ -1563,7 +1530,7 @@
         setRootProperty("--accent-c", rgbToCss(colors[2]));
         setRootProperty("--logo-accent-a", activeTheme.colors[0]);
         setRootProperty("--logo-accent-c", logoAccent);
-        setRootProperty("--logo-color", rgbToCss(logoColor.map((channel) => mixNumber(1, channel, logoMix))));
+        setRootProperty("--logo-color", activeTheme.logoColor || rgbToCss(logoColor.map((channel) => mixNumber(1, channel, logoMix))));
         setRootProperty("--logo-stroke", config.logo.stroke.toFixed(2));
         setRootProperty("--logo-wrap-glow", `${config.logo.wrapGlow}%`);
         setRootProperty("--logo-glow-strength", `${config.logo.glow}%`);
@@ -1573,9 +1540,6 @@
         if (logoFuseFlood.getAttribute("flood-opacity") !== fuseOpacity) {
           logoFuseFlood.setAttribute("flood-opacity", fuseOpacity);
         }
-        setTextIfChanged(captionTitle, config.caption.title);
-        setTextIfChanged(captionDetail, config.caption.detail);
-
         if (gl && program) {
           gl.useProgram(program);
           gl.uniform3fv(uniforms.colorA, colors[0]);
@@ -1597,7 +1561,9 @@
           lastActiveIndex = activeIndex;
           pulseSwitch();
         }
-        setTextIfChanged(themeLabel, activeTheme.label);
+        if (themeLabel.textContent !== activeTheme.label) {
+          themeLabel.textContent = activeTheme.label;
+        }
         if (themeButton.dataset.themeIndex !== String(activeIndex)) {
           themeButton.dataset.themeIndex = String(activeIndex);
           themeButton.setAttribute("aria-label", `${activeTheme.label}色系，点击切换到下一色系`);
@@ -1660,7 +1626,7 @@
       }
 
       function jumpToTheme(index, forceManual = false) {
-        const target = index / Math.max(1, config.themes.length - 1);
+        const target = progressForThemeIndex(index);
         if (forceManual || config.motion.manualProgress) {
           config.motion.manualProgress = true;
           config.motion.progress = target;
@@ -1737,7 +1703,6 @@
           Object.assign(config.logo, JSON.parse(JSON.stringify(BRAND_CONFIG.logo)));
           Object.assign(config.background, JSON.parse(JSON.stringify(BRAND_CONFIG.background)));
           Object.assign(config.motion, JSON.parse(JSON.stringify(BRAND_CONFIG.motion)));
-          Object.assign(config.caption, JSON.parse(JSON.stringify(BRAND_CONFIG.caption)));
           config.themes.splice(0, config.themes.length, ...JSON.parse(JSON.stringify(BRAND_CONFIG.themes)));
           motionClock = 0;
           syncThemeOptions();
@@ -1746,7 +1711,7 @@
         themeSelect.addEventListener("change", () => {
           activeEditorIndex = parseInt(themeSelect.value, 10);
           config.motion.manualProgress = true;
-          config.motion.progress = activeEditorIndex / Math.max(1, config.themes.length - 1);
+          config.motion.progress = progressForThemeIndex(activeEditorIndex);
           syncColorEditor(activeEditorIndex);
           applyVisualState({ syncUi: true });
         });
@@ -1791,14 +1756,6 @@
           config.motion.paused = event.target.checked;
           applyVisualState({ syncUi: true });
         });
-        captionTitleInput.addEventListener("input", () => {
-          config.caption.title = captionTitleInput.value;
-          applyVisualState();
-        });
-        captionDetailInput.addEventListener("input", () => {
-          config.caption.detail = captionDetailInput.value;
-          applyVisualState();
-        });
       }
 
       themeSwitcher.addEventListener("pointerdown", advanceTheme);
@@ -1820,6 +1777,10 @@
 
       initControls();
       resize();
+      if (!config.motion.manualProgress && window.scrollY < 2) {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        window.scrollTo({ top: max * defaultThemeProgress(), behavior: "auto" });
+      }
       applyVisualState({ syncUi: true });
       window.addEventListener("resize", resize);
       requestAnimationFrame(render);
