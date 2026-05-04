@@ -1,0 +1,1803 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SEASNAKE Logo Preview</title>
+    <style>
+      :root {
+        --ink: #fff;
+        --paper: #000;
+        --muted: rgba(255, 255, 255, 0.56);
+        --hairline: rgba(255, 255, 255, 0.18);
+        --accent-a: #22c6c5;
+        --accent-b: #1da4ab;
+        --accent-c: #6dd5de;
+        --logo-accent-a: #22c6c5;
+        --logo-accent-c: #6dd5de;
+        --logo-color: #bceef2;
+        --logo-wrap-glow: 34%;
+        --logo-glow-strength: 46%;
+        --logo-white-glow: 12%;
+        --logo-edge-shadow: 0.12;
+        --glass-tint: rgba(255, 255, 255, 0.105);
+        --logo-stroke: 8.75;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .bg-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        pointer-events: none;
+        opacity: 0.95;
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+        min-height: 320vh;
+        padding: 0 32px;
+      }
+
+      .stage {
+        position: sticky;
+        top: 0;
+        min-height: 100vh;
+        width: min(920px, 100%);
+        margin: 0 auto;
+        display: grid;
+        place-items: center;
+      }
+
+      .logo-wrap {
+        position: relative;
+        width: min(700px, 100%);
+        margin: 0 auto;
+        aspect-ratio: 826.87 / 618.54;
+        filter:
+          drop-shadow(0 10px 24px rgba(0, 18, 20, 0.16))
+          drop-shadow(0 0 20px color-mix(in srgb, var(--logo-accent-c) var(--logo-wrap-glow), transparent));
+        isolation: isolate;
+      }
+
+      .seasnake-logo {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: visible;
+        mix-blend-mode: normal;
+      }
+
+      .seasnake-logo line,
+      .seasnake-logo path {
+        fill: none;
+        stroke: var(--logo-color);
+        stroke-width: var(--logo-stroke);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+        shape-rendering: geometricPrecision;
+        transition: stroke 120ms ease-out, opacity 180ms ease;
+      }
+
+      .logo-strokes {
+        filter:
+          url("#single-layer-fuse")
+          drop-shadow(0 0 3px color-mix(in srgb, #fff var(--logo-white-glow), transparent))
+          drop-shadow(0 0 15px color-mix(in srgb, var(--logo-accent-c) var(--logo-glow-strength), transparent))
+          drop-shadow(0 1px 0 rgba(0, 18, 20, var(--logo-edge-shadow)));
+      }
+
+      .seasnake-logo .frame-line {
+        stroke-width: calc(var(--logo-stroke) + 0.25);
+      }
+
+      .edge-runner {
+        opacity: 0;
+        filter: drop-shadow(0 0 12px var(--accent-c));
+        mix-blend-mode: screen;
+        transition: opacity 260ms ease;
+        pointer-events: none;
+      }
+
+      .edge-runner path {
+        stroke: color-mix(in srgb, var(--accent-c) 72%, #fff);
+        stroke-width: calc(var(--logo-stroke) + 1.7);
+        stroke-dasharray: 118 520;
+        stroke-dashoffset: 0;
+        opacity: 0.95;
+        animation: edgeAdvance 1.08s cubic-bezier(0.4, 0, 0.12, 1) infinite;
+      }
+
+      .edge-runner .edge-2 {
+        animation-delay: 0.18s;
+      }
+
+      .edge-runner .edge-3 {
+        animation-delay: 0.36s;
+      }
+
+      body.is-switching .edge-runner {
+        opacity: 1;
+      }
+
+      .sun-rays line {
+        stroke-width: 1.2;
+        stroke: rgba(255, 255, 255, 0.15);
+        stroke-linecap: round;
+        transform-box: fill-box;
+        transform-origin: top center;
+        opacity: 0;
+        animation: rayFall 2.25s cubic-bezier(0.18, 0.82, 0.2, 1) 0.05s both;
+      }
+
+      .sun-rays line:nth-child(2) {
+        animation-delay: 0.12s;
+      }
+
+      .sun-rays line:nth-child(3) {
+        animation-delay: 0.18s;
+      }
+
+      .sun-rays line:nth-child(4) {
+        animation-delay: 0.24s;
+      }
+
+      .sun-rays line:nth-child(5) {
+        animation-delay: 0.30s;
+      }
+
+      .draw-down {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: drawDown 1.25s cubic-bezier(0.64, 0, 0.2, 1) var(--delay) both;
+      }
+
+      .spread-line {
+        transform-box: fill-box;
+        transform-origin: center center;
+        transform: scaleX(0);
+        opacity: 0;
+        animation: spreadOut 0.92s cubic-bezier(0.16, 0.86, 0.18, 1) var(--delay) both;
+      }
+
+      .caption {
+        position: absolute;
+        left: 50%;
+        bottom: 36px;
+        transform: translateX(-50%);
+        width: min(760px, 100%);
+        margin: 28px auto 0;
+        padding-top: 18px;
+        border-top: 1px solid var(--hairline);
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+        letter-spacing: 0;
+      }
+
+      .caption strong {
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .theme-switcher {
+        position: fixed;
+        z-index: 2;
+        top: 28px;
+        right: 30px;
+        display: grid;
+        grid-template-columns: 10px auto;
+        gap: 12px;
+        align-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      .theme-strip {
+        width: 10px;
+        height: 118px;
+        background:
+          linear-gradient(180deg, var(--accent-a) 0 33.33%, var(--accent-b) 33.33% 66.66%, var(--accent-c) 66.66% 100%);
+        box-shadow:
+          0 0 18px color-mix(in srgb, var(--accent-a) 42%, transparent),
+          inset 0 1px 0 rgba(255, 255, 255, 0.34);
+        opacity: 0.92;
+        transition: background 420ms ease, box-shadow 420ms ease;
+      }
+
+      .theme-button {
+        position: relative;
+        width: 42px;
+        min-height: 118px;
+        padding: 10px 0;
+        border: 0;
+        background: transparent;
+        color: color-mix(in srgb, var(--accent-c) 36%, #fff);
+        cursor: pointer;
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.18;
+        letter-spacing: 0.18em;
+        writing-mode: vertical-rl;
+        text-align: center;
+        text-orientation: upright;
+        text-shadow:
+          0 0 18px color-mix(in srgb, var(--accent-a) 42%, transparent),
+          0 1px 14px rgba(0, 0, 0, 0.62);
+        transition: color 420ms ease, text-shadow 420ms ease, transform 260ms ease;
+      }
+
+      .theme-button::before {
+        content: "";
+        position: absolute;
+        inset: -10px 7px;
+        border-left: 1px solid color-mix(in srgb, var(--accent-c) 34%, rgba(255, 255, 255, 0.18));
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        opacity: 0.8;
+        pointer-events: none;
+      }
+
+      .theme-button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -7px;
+        width: 1px;
+        height: 62px;
+        background: linear-gradient(180deg, transparent, var(--accent-c), transparent);
+        transform: translateY(-50%);
+        opacity: 0.78;
+        box-shadow: 0 0 12px var(--accent-a);
+        transition: background 420ms ease, box-shadow 420ms ease;
+      }
+
+      .theme-button span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .theme-button[aria-pressed="true"] {
+        color: color-mix(in srgb, var(--accent-c) 54%, #fff);
+        transform: translateY(-1px);
+        outline: 0;
+      }
+
+      .theme-button:active {
+        transform: translateY(1px);
+      }
+
+      .manual-link {
+        position: fixed;
+        z-index: 3;
+        left: 30px;
+        top: 28px;
+        display: grid;
+        gap: 2px;
+        min-width: 118px;
+        padding: 12px 14px 11px;
+        border: 1px solid color-mix(in srgb, var(--accent-c) 34%, rgba(255, 255, 255, 0.14));
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.018)),
+          rgba(0, 12, 14, 0.34);
+        color: color-mix(in srgb, var(--accent-c) 28%, #fff);
+        text-decoration: none;
+        letter-spacing: 0.08em;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 0 20px color-mix(in srgb, var(--accent-c) 18%, transparent),
+          0 16px 36px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(10px) saturate(1.12);
+        transition: border-color 220ms ease, color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+      }
+
+      .manual-link span {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .manual-link small {
+        color: rgba(255, 255, 255, 0.52);
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .manual-link:hover {
+        border-color: color-mix(in srgb, var(--accent-c) 70%, rgba(255, 255, 255, 0.2));
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          0 0 26px color-mix(in srgb, var(--accent-c) 32%, transparent),
+          0 18px 42px rgba(0, 0, 0, 0.34);
+      }
+
+      .manual-transition {
+        position: fixed;
+        inset: 0;
+        z-index: 8;
+        display: grid;
+        place-items: center;
+        color: color-mix(in srgb, var(--accent-c) 48%, #fff);
+        background:
+          radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--accent-a) 18%, transparent), transparent 34%),
+          rgba(0, 0, 0, 0);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease, background 720ms ease;
+      }
+
+      .manual-transition::before,
+      .manual-transition::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .manual-transition::before {
+        background:
+          linear-gradient(90deg, transparent 0 18%, color-mix(in srgb, var(--accent-c) 18%, transparent) 48%, transparent 82%),
+          linear-gradient(180deg, transparent 0 36%, rgba(255, 255, 255, 0.08) 50%, transparent 64%);
+        opacity: 0;
+        transform: translateX(-18%);
+      }
+
+      .manual-transition::after {
+        background: rgba(251, 251, 245, 0);
+        clip-path: polygon(50% 7%, 94% 94%, 6% 94%);
+        transform: scale(0.42);
+        opacity: 0;
+      }
+
+      .manual-transition svg {
+        position: relative;
+        z-index: 1;
+        width: min(420px, 62vw);
+        overflow: visible;
+        filter:
+          drop-shadow(0 0 18px color-mix(in srgb, var(--accent-c) 42%, transparent))
+          drop-shadow(0 26px 64px rgba(0, 0, 0, 0.55));
+      }
+
+      .manual-transition path,
+      .manual-transition line {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        opacity: 0;
+      }
+
+      .manual-transition .manual-word {
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-anchor: middle;
+        fill: rgba(255, 255, 255, 0.68);
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      body.is-bridge-leaving {
+        overflow: hidden;
+      }
+
+      body.is-bridge-leaving .manual-link,
+      body.is-bridge-leaving .theme-switcher,
+      body.is-bridge-leaving .config-panel,
+      body.is-bridge-leaving .caption {
+        opacity: 0;
+        transition: opacity 260ms ease;
+      }
+
+      body.is-bridge-leaving .logo-wrap {
+        transform: translateY(-4vh) scale(0.76);
+        opacity: 0.26;
+        transition: transform 760ms cubic-bezier(0.2, 0.84, 0.16, 1), opacity 620ms ease;
+      }
+
+      body.is-bridge-leaving .bg-canvas {
+        opacity: 0.48;
+        filter: blur(2px) saturate(0.72);
+        transition: opacity 720ms ease, filter 720ms ease;
+      }
+
+      body.is-bridge-leaving .manual-transition {
+        opacity: 1;
+        background:
+          radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--accent-a) 22%, transparent), transparent 34%),
+          rgba(0, 0, 0, 0.72);
+      }
+
+      body.is-bridge-leaving .manual-transition::before {
+        animation: manualBeam 900ms cubic-bezier(0.18, 0.82, 0.2, 1) 80ms both;
+      }
+
+      body.is-bridge-leaving .manual-transition::after {
+        animation: manualPaper 920ms cubic-bezier(0.18, 0.82, 0.2, 1) 280ms both;
+      }
+
+      body.is-bridge-leaving .manual-transition path,
+      body.is-bridge-leaving .manual-transition line {
+        animation: manualDraw 760ms cubic-bezier(0.18, 0.82, 0.2, 1) var(--bridge-delay, 0ms) both;
+      }
+
+      body.is-bridge-leaving .manual-transition .manual-word {
+        animation: manualWord 520ms ease 640ms both;
+      }
+
+      .config-panel {
+        position: fixed;
+        z-index: 4;
+        right: 24px;
+        bottom: 24px;
+        width: min(360px, calc(100vw - 32px));
+        color: rgba(255, 255, 255, 0.82);
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        contain: layout style paint;
+      }
+
+      .config-toggle {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 54px;
+        height: 54px;
+        border: 1px solid color-mix(in srgb, var(--accent-c) 48%, rgba(255, 255, 255, 0.16));
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 36% 28%, rgba(255, 255, 255, 0.20), transparent 34%),
+          rgba(0, 12, 14, 0.58);
+        color: color-mix(in srgb, var(--accent-c) 32%, #fff);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0;
+        box-shadow:
+          0 0 20px color-mix(in srgb, var(--accent-c) 28%, transparent),
+          0 14px 36px rgba(0, 0, 0, 0.36);
+        backdrop-filter: blur(8px);
+      }
+
+      .config-body {
+        max-height: min(680px, calc(100vh - 48px));
+        overflow: auto;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.025)),
+          rgba(0, 12, 14, 0.88);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          0 18px 48px rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(6px) saturate(1.08);
+        overscroll-behavior: contain;
+        contain: content;
+        transform: translateY(16px) scale(0.98);
+        transform-origin: right bottom;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms ease, transform 220ms ease;
+      }
+
+      .config-panel[data-open="true"] .config-body {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+      }
+
+      .config-panel[data-open="true"] .config-toggle {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .config-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .config-kicker {
+        display: block;
+        color: color-mix(in srgb, var(--accent-c) 46%, #fff);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+      }
+
+      .config-title {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: 15px;
+        line-height: 1.2;
+      }
+
+      .config-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .config-actions button,
+      .config-close {
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.78);
+        cursor: pointer;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1;
+        padding: 8px 10px;
+      }
+
+      .config-close {
+        width: 32px;
+        padding: 8px 0;
+      }
+
+      .config-section {
+        padding: 14px 0 4px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .config-section:last-child {
+        border-bottom: 0;
+      }
+
+      .config-section h2 {
+        margin: 0 0 10px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+      }
+
+      .control-row {
+        display: grid;
+        grid-template-columns: 86px 1fr 42px;
+        gap: 10px;
+        align-items: center;
+        margin: 9px 0;
+        font-size: 12px;
+      }
+
+      .control-row span:first-child {
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      .control-value {
+        color: rgba(255, 255, 255, 0.78);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .control-row input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent-c);
+      }
+
+      .control-row input[type="text"],
+      .control-row select {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.22);
+        color: rgba(255, 255, 255, 0.86);
+        font: inherit;
+        padding: 7px 8px;
+        outline: none;
+      }
+
+      .control-row input[type="color"] {
+        width: 100%;
+        height: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px;
+      }
+
+      .control-row.control-wide {
+        grid-template-columns: 86px 1fr;
+      }
+
+      .control-row.control-check {
+        grid-template-columns: 86px 1fr;
+      }
+
+      .control-row.control-check input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--accent-c);
+      }
+
+      .config-note {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.48);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      @keyframes drawDown {
+        from {
+          stroke-dashoffset: 1;
+          opacity: 0;
+        }
+
+        12% {
+          opacity: 1;
+        }
+
+        to {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+      }
+
+      @keyframes spreadOut {
+        from {
+          transform: scaleX(0);
+          opacity: 0;
+        }
+
+        18% {
+          opacity: 1;
+        }
+
+        to {
+          transform: scaleX(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes rayFall {
+        0% {
+          opacity: 0;
+          stroke-dasharray: 0 1;
+          transform: scaleY(0.25);
+        }
+
+        28% {
+          opacity: 0.28;
+        }
+
+        72% {
+          opacity: 0.12;
+        }
+
+        100% {
+          opacity: 0;
+          stroke-dasharray: 1 0;
+          transform: scaleY(1);
+        }
+      }
+
+      @keyframes edgeAdvance {
+        from {
+          stroke-dashoffset: 0;
+        }
+
+        to {
+          stroke-dashoffset: -638;
+        }
+      }
+
+      @keyframes manualDraw {
+        from {
+          stroke-dashoffset: 1;
+          opacity: 0;
+        }
+
+        18% {
+          opacity: 1;
+        }
+
+        to {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+      }
+
+      @keyframes manualBeam {
+        from {
+          opacity: 0;
+          transform: translateX(-18%) scaleX(0.72);
+        }
+
+        45% {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0.28;
+          transform: translateX(0) scaleX(1);
+        }
+      }
+
+      @keyframes manualPaper {
+        from {
+          opacity: 0;
+          transform: scale(0.42);
+          background: rgba(251, 251, 245, 0);
+        }
+
+        to {
+          opacity: 0.12;
+          transform: scale(1.04);
+          background: rgba(251, 251, 245, 0.28);
+        }
+      }
+
+      @keyframes manualWord {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .bg-canvas {
+          display: none;
+        }
+
+        .sun-rays line,
+        .edge-runner path,
+        .draw-down,
+        .spread-line,
+        .manual-transition path,
+        .manual-transition line,
+        .manual-transition .manual-word {
+          animation: none;
+          opacity: 1;
+          stroke-dashoffset: 0;
+          transform: none;
+        }
+
+        .sun-rays line {
+          opacity: 0;
+        }
+
+        main {
+          min-height: 100vh;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .caption {
+          left: 32px;
+          right: 112px;
+          width: auto;
+          transform: none;
+          display: block;
+        }
+
+        .caption span {
+          display: block;
+          margin-top: 6px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        main {
+          padding: 0 22px;
+        }
+
+        .theme-switcher {
+          top: 16px;
+          right: 16px;
+        }
+
+        .manual-link {
+          left: 16px;
+          top: 16px;
+          min-width: 100px;
+          padding: 10px 12px;
+        }
+
+        .config-panel {
+          right: 16px;
+          bottom: 16px;
+        }
+
+        .config-body {
+          max-height: calc(100vh - 32px);
+        }
+
+        .control-row {
+          grid-template-columns: 78px 1fr 38px;
+        }
+
+        .caption {
+          left: 22px;
+          right: 96px;
+          bottom: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="bg-canvas" id="bg-canvas"></canvas>
+    <a class="manual-link" href="./seasnake-ouroboros-concepts.html?from=preview#top" data-manual-link aria-label="从动态预览进入 SEASNAKE VI 文档">
+      <span>VI 手册</span>
+      <small>Brand Manual</small>
+    </a>
+    <div class="manual-transition" aria-hidden="true">
+      <svg viewBox="0 0 826.87 618.54" focusable="false">
+        <path pathLength="1" style="--bridge-delay:80ms" d="M419.44 36 L790.87 582.54 L36 582.54 Z" />
+        <path pathLength="1" style="--bridge-delay:220ms" d="M378.15 188.94 L305.61 258.94 L362.03 258.94 L292.26 335.52" />
+        <line pathLength="1" style="--bridge-delay:270ms" x1="382.03" y1="258.94" x2="433.03" y2="258.94" />
+        <path pathLength="1" style="--bridge-delay:320ms" d="M422.44 188.94 L382.03 258.94 L422.44 328.94" />
+        <line pathLength="1" style="--bridge-delay:360ms" x1="478.30" y1="258.94" x2="521.05" y2="258.94" />
+        <path pathLength="1" style="--bridge-delay:400ms" d="M462.78 328.94 L485.03 188.94 L565.86 328.94" />
+        <line pathLength="1" style="--bridge-delay:480ms" x1="192.15" y1="441.94" x2="631.10" y2="441.94" />
+        <text class="manual-word" x="413.43" y="552">SEASNAKE VI</text>
+      </svg>
+    </div>
+    <div class="theme-switcher" aria-label="Current color theme">
+      <div class="theme-strip" aria-hidden="true"></div>
+      <button class="theme-button" type="button" data-theme-index="0" aria-label="滚动切换色系" aria-pressed="true"><span id="theme-label">青蓝</span></button>
+    </div>
+    <aside class="config-panel" id="config-panel" data-open="false" aria-label="SEASNAKE visual tuning panel">
+      <button class="config-toggle" id="config-toggle" type="button" aria-expanded="false" aria-controls="config-body">调参</button>
+      <div class="config-body" id="config-body">
+        <header class="config-head">
+          <div>
+            <span class="config-kicker">SEASNAKE LAB</span>
+            <h1 class="config-title">视觉参数</h1>
+          </div>
+          <div class="config-actions">
+            <button id="config-reset" type="button">重置</button>
+            <button class="config-close" id="config-close" type="button" aria-label="关闭调参面板">×</button>
+          </div>
+        </header>
+
+        <section class="config-section" aria-label="Color controls">
+          <h2>颜色</h2>
+          <label class="control-row control-wide">
+            <span>色系</span>
+            <select id="control-theme"></select>
+          </label>
+          <label class="control-row">
+            <span>底色</span>
+            <input id="color-a" type="color" />
+            <span class="control-value" id="color-a-value"></span>
+          </label>
+          <label class="control-row">
+            <span>深色</span>
+            <input id="color-b" type="color" />
+            <span class="control-value" id="color-b-value"></span>
+          </label>
+          <label class="control-row">
+            <span>浅色</span>
+            <input id="color-c" type="color" />
+            <span class="control-value" id="color-c-value"></span>
+          </label>
+        </section>
+
+        <section class="config-section" aria-label="Logo controls">
+          <h2>LOGO</h2>
+          <label class="control-row">
+            <span>字重</span>
+            <input id="logo-stroke" type="range" min="6" max="12" step="0.25" />
+            <span class="control-value" id="logo-stroke-value"></span>
+          </label>
+          <label class="control-row">
+            <span>吃色</span>
+            <input id="logo-color-mix" type="range" min="0" max="80" step="1" />
+            <span class="control-value" id="logo-color-mix-value"></span>
+          </label>
+          <label class="control-row">
+            <span>彩光</span>
+            <input id="logo-glow" type="range" min="0" max="80" step="1" />
+            <span class="control-value" id="logo-glow-value"></span>
+          </label>
+          <label class="control-row">
+            <span>白光</span>
+            <input id="logo-fuse" type="range" min="0" max="40" step="1" />
+            <span class="control-value" id="logo-fuse-value"></span>
+          </label>
+          <label class="control-row">
+            <span>暗边</span>
+            <input id="logo-shadow" type="range" min="0" max="35" step="1" />
+            <span class="control-value" id="logo-shadow-value"></span>
+          </label>
+        </section>
+
+        <section class="config-section" aria-label="Background controls">
+          <h2>背景</h2>
+          <label class="control-row control-wide">
+            <span>形状</span>
+            <select id="bg-shape">
+              <option value="square">方块</option>
+              <option value="diamond">菱形</option>
+              <option value="ellipse">椭圆</option>
+              <option value="none">关闭</option>
+            </select>
+          </label>
+          <label class="control-row">
+            <span>切块</span>
+            <input id="bg-block" type="range" min="0" max="1" step="0.01" />
+            <span class="control-value" id="bg-block-value"></span>
+          </label>
+          <label class="control-row">
+            <span>大格</span>
+            <input id="bg-large" type="range" min="4" max="14" step="0.1" />
+            <span class="control-value" id="bg-large-value"></span>
+          </label>
+          <label class="control-row">
+            <span>细格</span>
+            <input id="bg-small" type="range" min="8" max="28" step="0.1" />
+            <span class="control-value" id="bg-small-value"></span>
+          </label>
+          <label class="control-row">
+            <span>扭曲</span>
+            <input id="bg-warp" type="range" min="1" max="4.5" step="0.05" />
+            <span class="control-value" id="bg-warp-value"></span>
+          </label>
+          <label class="control-row">
+            <span>暗部</span>
+            <input id="bg-darkness" type="range" min="0" max="1" step="0.01" />
+            <span class="control-value" id="bg-darkness-value"></span>
+          </label>
+          <label class="control-row">
+            <span>亮度</span>
+            <input id="bg-brightness" type="range" min="0.7" max="1.3" step="0.01" />
+            <span class="control-value" id="bg-brightness-value"></span>
+          </label>
+          <label class="control-row">
+            <span>高光</span>
+            <input id="bg-shine" type="range" min="0" max="1" step="0.01" />
+            <span class="control-value" id="bg-shine-value"></span>
+          </label>
+        </section>
+
+        <section class="config-section" aria-label="Motion controls">
+          <h2>动画</h2>
+          <label class="control-row">
+            <span>速度</span>
+            <input id="motion-speed" type="range" min="0" max="2" step="0.05" />
+            <span class="control-value" id="motion-speed-value"></span>
+          </label>
+          <label class="control-row">
+            <span>滚动</span>
+            <input id="scroll-power" type="range" min="0" max="2" step="0.05" />
+            <span class="control-value" id="scroll-power-value"></span>
+          </label>
+          <label class="control-row control-check">
+            <span>手动</span>
+            <input id="manual-progress" type="checkbox" />
+          </label>
+          <label class="control-row">
+            <span>进度</span>
+            <input id="progress-range" type="range" min="0" max="1" step="0.001" />
+            <span class="control-value" id="progress-range-value"></span>
+          </label>
+          <label class="control-row">
+            <span>背景进度</span>
+            <input id="bg-progress" type="range" min="0" max="1" step="0.001" />
+            <span class="control-value" id="bg-progress-value"></span>
+          </label>
+          <label class="control-row control-check">
+            <span>暂停</span>
+            <input id="pause-motion" type="checkbox" />
+          </label>
+        </section>
+
+        <section class="config-section" aria-label="Caption controls">
+          <h2>底部文字</h2>
+          <label class="control-row control-wide">
+            <span>标题</span>
+            <input id="caption-title-input" type="text" />
+          </label>
+          <label class="control-row control-wide">
+            <span>说明</span>
+            <input id="caption-detail-input" type="text" />
+          </label>
+          <p class="config-note">参数实时生效。打开控制台也可以直接看 window.SEASNAKE_CONFIG。</p>
+        </section>
+      </div>
+    </aside>
+    <main>
+      <section class="stage" aria-label="SEASNAKE logo animation preview">
+        <div class="logo-wrap">
+          <svg class="seasnake-logo" viewBox="0 0 826.87 618.54" role="img" aria-labelledby="seasnakeTitle" xmlns="http://www.w3.org/2000/svg">
+            <title id="seasnakeTitle">SEASNAKE final black logo</title>
+            <defs>
+              <filter id="single-layer-fuse" x="-16%" y="-16%" width="132%" height="132%" color-interpolation-filters="sRGB">
+                <feMorphology in="SourceAlpha" operator="dilate" radius="0.85" result="expanded" />
+                <feMorphology in="expanded" operator="erode" radius="0.52" result="fusedAlpha" />
+                <feGaussianBlur in="fusedAlpha" stdDeviation="1.35" result="softGlow" />
+                <feFlood id="logo-fuse-flood" flood-color="#ffffff" flood-opacity="0.18" result="glowColor" />
+                <feComposite in="glowColor" in2="softGlow" operator="in" result="glow" />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <g class="sun-rays" aria-hidden="true">
+              <line x1="413.43" y1="44" x2="90.96" y2="531.94" />
+              <line x1="413.43" y1="44" x2="248.06" y2="562.87" />
+              <line x1="413.43" y1="44" x2="413.43" y2="587.61" />
+              <line x1="413.43" y1="44" x2="578.81" y2="562.87" />
+              <line x1="413.43" y1="44" x2="735.91" y2="531.94" />
+            </g>
+            <g class="edge-runner" aria-hidden="true">
+              <path class="edge-1" d="M419.44 36 L790.87 582.54" />
+              <path class="edge-2" d="M790.87 582.54 L36 582.54" />
+              <path class="edge-3" d="M36 582.54 L419.44 36" />
+            </g>
+            <g class="logo-strokes">
+              <path class="frame-line draw-down" pathLength="1" d="M419.44 36 L790.87 582.54 L36 582.54 Z" style="--delay:0.75s" />
+              <path class="mark-line draw-down" pathLength="1" d="M378.15 188.94 L305.61 258.94 L362.03 258.94 L292.26 335.52" style="--delay:0.52s" />
+              <line class="mark-line spread-line" x1="382.03" y1="258.94" x2="433.03" y2="258.94" style="--delay:0.52s" />
+              <path class="mark-line draw-down" pathLength="1" d="M422.44 188.94 L382.03 258.94 L422.44 328.94" style="--delay:0.52s" />
+              <line class="mark-line spread-line" x1="478.30" y1="258.94" x2="521.05" y2="258.94" style="--delay:0.52s" />
+              <path class="mark-line draw-down" pathLength="1" d="M462.78 328.94 L485.03 188.94" style="--delay:0.52s" />
+              <path class="mark-line draw-down" pathLength="1" d="M485.03 188.94 L565.86 328.94" style="--delay:0.52s" />
+              <path class="mark-line draw-down" pathLength="1" d="M285.26 365.94 L192.15 441.94 L247.03 441.94 L155.44 518.94" style="--delay:0.81s" />
+              <path class="mark-line draw-down" pathLength="1" d="M232.03 517.94 L319.79 365.94 L292.79 517.94 L380.54 365.94" style="--delay:0.81s" />
+              <line class="mark-line spread-line" x1="376.35" y1="441.94" x2="453.70" y2="441.94" style="--delay:0.81s" />
+              <path class="mark-line draw-down" pathLength="1" d="M327.27 517.94 L415.03 365.94 L502.79 517.94" style="--delay:0.85s" />
+              <path class="mark-line draw-down" pathLength="1" d="M491.91 441.94 L535.79 365.94" style="--delay:0.75s" />
+              <path class="mark-line draw-down" pathLength="1" d="M491.91 441.94 L601.54 517.94" style="--delay:0.87s" />
+              <path class="mark-line draw-down" pathLength="1" d="M448.03 365.94 L535.79 517.94" style="--delay:0.81s" />
+              <line class="mark-line spread-line" x1="543.34" y1="441.94" x2="631.10" y2="441.94" style="--delay:0.81s" />
+              <path class="mark-line draw-down" pathLength="1" d="M587.22 365.94 L543.34 441.94 L672.98 518.94" style="--delay:0.81s" />
+            </g>
+          </svg>
+        </div>
+        <div class="caption">
+          <strong id="caption-title">SEASNAKE / final black stroke system</strong>
+          <span id="caption-detail">16 logo strokes only. Extra helper lines are excluded.</span>
+        </div>
+      </section>
+    </main>
+    <script>
+      const BRAND_CONFIG = {
+        themes: [
+          { key: "cyan", label: "青蓝", colors: ["#22C6C5", "#1DA4AB", "#6DD5DE"], logoColorIndex: 2 },
+          { key: "acid", label: "竹叶", colors: ["#D9F01A", "#BCC94E", "#E2F072"], logoColorIndex: 0 },
+          { key: "rose", label: "赤练", colors: ["#F1265F", "#C41F4D", "#F26089"], logoColorIndex: 2 },
+        ],
+        logo: {
+          stroke: 8.75,
+          colorMix: 52,
+          acidColorMix: 46,
+          glow: 46,
+          wrapGlow: 34,
+          fuseGlow: 0.18,
+          edgeShadow: 0.12,
+        },
+        background: {
+          shape: "square",
+          blockMix: 0.54,
+          sliceLarge: 6.8,
+          sliceSmall: 13.4,
+          warp: 3.05,
+          darkness: 0.43,
+          brightness: 1.08,
+          contrast: 1.04,
+          shine: 0.56,
+        },
+        motion: {
+          speed: 0.9,
+          scrollPower: 1.15,
+          manualProgress: false,
+          progress: 0,
+          backgroundProgress: 0,
+          paused: false,
+        },
+        caption: {
+          title: "SEASNAKE / final black stroke system",
+          detail: "16 logo strokes only. Extra helper lines are excluded.",
+        },
+      };
+
+      const config = JSON.parse(JSON.stringify(BRAND_CONFIG));
+      const root = document.documentElement;
+      const canvas = document.getElementById("bg-canvas");
+      const themeSwitcher = document.querySelector(".theme-switcher");
+      const themeButton = document.querySelector(".theme-button");
+      const themeLabel = document.getElementById("theme-label");
+      const manualLink = document.querySelector("[data-manual-link]");
+      const configPanel = document.getElementById("config-panel");
+      const configToggle = document.getElementById("config-toggle");
+      const configClose = document.getElementById("config-close");
+      const configReset = document.getElementById("config-reset");
+      const themeSelect = document.getElementById("control-theme");
+      const bgShapeSelect = document.getElementById("bg-shape");
+      const captionTitle = document.getElementById("caption-title");
+      const captionDetail = document.getElementById("caption-detail");
+      const captionTitleInput = document.getElementById("caption-title-input");
+      const captionDetailInput = document.getElementById("caption-detail-input");
+      const logoFuseFlood = document.getElementById("logo-fuse-flood");
+      const colorInputs = [
+        document.getElementById("color-a"),
+        document.getElementById("color-b"),
+        document.getElementById("color-c"),
+      ];
+      const colorValues = [
+        document.getElementById("color-a-value"),
+        document.getElementById("color-b-value"),
+        document.getElementById("color-c-value"),
+      ];
+
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let gl = null;
+      let program = null;
+      let uniforms = {};
+      let fallbackCtx = null;
+      let lastActiveIndex = 0;
+      let switchTimer = 0;
+      let themeAdvanceTimer = 0;
+      let motionClock = 0;
+      let lastFrameMs = 0;
+      let lastDrawMs = 0;
+      let activeEditorIndex = 0;
+      const cssCache = new Map();
+
+      window.SEASNAKE_CONFIG = config;
+      window.SEASNAKE_DEFAULT_CONFIG = BRAND_CONFIG;
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function hexToRgb(hex) {
+        const value = hex.replace("#", "");
+        return {
+          r: parseInt(value.slice(0, 2), 16),
+          g: parseInt(value.slice(2, 4), 16),
+          b: parseInt(value.slice(4, 6), 16),
+        };
+      }
+
+      function rgb01(hex) {
+        const color = hexToRgb(hex);
+        return [color.r / 255, color.g / 255, color.b / 255];
+      }
+
+      function mixNumber(a, b, amount) {
+        return a + (b - a) * amount;
+      }
+
+      function mixRgb(left, right, amount) {
+        const a = hexToRgb(left);
+        const b = hexToRgb(right);
+        return [
+          mixNumber(a.r, b.r, amount) / 255,
+          mixNumber(a.g, b.g, amount) / 255,
+          mixNumber(a.b, b.b, amount) / 255,
+        ];
+      }
+
+      function rgbToCss(rgb) {
+        return `rgb(${Math.round(rgb[0] * 255)}, ${Math.round(rgb[1] * 255)}, ${Math.round(rgb[2] * 255)})`;
+      }
+
+      function setRootProperty(name, value) {
+        if (cssCache.get(name) === value) {
+          return;
+        }
+        cssCache.set(name, value);
+        root.style.setProperty(name, value);
+      }
+
+      function setTextIfChanged(element, value) {
+        if (element.textContent !== value) {
+          element.textContent = value;
+        }
+      }
+
+      function activeIndexForProgress(progress) {
+        return Math.min(config.themes.length - 1, Math.floor(clamp(progress, 0, 0.999999) * config.themes.length));
+      }
+
+      function getEffectiveProgress() {
+        if (config.motion.manualProgress) {
+          return clamp(config.motion.progress, 0, 1);
+        }
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        return clamp(window.scrollY / max, 0, 1);
+      }
+
+      function getBackgroundProgress(progress) {
+        return (progress + config.motion.backgroundProgress) % 1;
+      }
+
+      function shapeModeValue(shape) {
+        return {
+          none: 0,
+          square: 1,
+          diamond: 2,
+          ellipse: 3,
+        }[shape] ?? 1;
+      }
+
+      function paletteAt(progress) {
+        const clampedProgress = clamp(progress, 0, 1);
+        const scaled = clampedProgress * (config.themes.length - 1);
+        const index = Math.min(config.themes.length - 2, Math.floor(scaled));
+        const amount = scaled - index;
+        const from = config.themes[index].colors;
+        const to = config.themes[index + 1].colors;
+        return [
+          mixRgb(from[0], to[0], amount),
+          mixRgb(from[1], to[1], amount),
+          mixRgb(from[2], to[2], amount),
+        ];
+      }
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        if (gl) {
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        } else if (fallbackCtx) {
+          fallbackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+      }
+
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          throw new Error(gl.getShaderInfoLog(shader) || "Shader compile failed");
+        }
+        return shader;
+      }
+
+      function createShaderBackground() {
+        gl = canvas.getContext("webgl", {
+          antialias: false,
+          alpha: false,
+          depth: false,
+          stencil: false,
+          premultipliedAlpha: false,
+        });
+
+        if (!gl) {
+          fallbackCtx = canvas.getContext("2d");
+          return false;
+        }
+
+        const vertexSource = `
+          attribute vec2 a_position;
+          varying vec2 v_uv;
+
+          void main() {
+            v_uv = a_position * 0.5 + 0.5;
+            gl_Position = vec4(a_position, 0.0, 1.0);
+          }
+        `;
+
+        const fragmentSource = `
+          precision highp float;
+
+          uniform vec2 u_resolution;
+          uniform float u_time;
+          uniform float u_scroll;
+          uniform float u_scrollPower;
+          uniform float u_warp;
+          uniform float u_sliceLarge;
+          uniform float u_sliceSmall;
+          uniform float u_blockMix;
+          uniform float u_shapeMode;
+          uniform float u_darkness;
+          uniform float u_brightness;
+          uniform float u_contrast;
+          uniform float u_shine;
+          uniform vec3 u_colorA;
+          uniform vec3 u_colorB;
+          uniform vec3 u_colorC;
+          varying vec2 v_uv;
+
+          void coswarp(inout vec3 trip, float warpsScale) {
+            trip.xyz += warpsScale * 0.100 * cos(3.0 * trip.yzx + (u_time * 0.25));
+            trip.xyz += warpsScale * 0.050 * cos(11.0 * trip.yzx + (u_time * 0.25));
+            trip.xyz += warpsScale * 0.025 * cos(17.0 * trip.yzx + (u_time * 0.25));
+          }
+
+          float cellMetric(vec2 cell, float shapeMode) {
+            vec2 c = cell * 2.0 - 1.0;
+            float squareMetric = max(abs(c.x), abs(c.y));
+            float diamondMetric = (abs(c.x) + abs(c.y)) * 0.70710678;
+            float ellipseMetric = length(c * vec2(0.68, 1.36));
+            if (shapeMode > 2.5) {
+              return ellipseMetric;
+            }
+            if (shapeMode > 1.5) {
+              return diamondMetric;
+            }
+            return squareMetric;
+          }
+
+          void main() {
+            vec2 uv = (gl_FragCoord.xy - u_resolution * 0.5) / u_resolution.y + 0.5;
+            vec2 uv2 = uv;
+            vec2 centered = uv - 0.5;
+            vec2 largeCell = fract(centered * u_sliceLarge);
+            vec2 smallCell = fract(centered * u_sliceSmall);
+            float activeBlock = u_shapeMode < 0.5 ? 0.0 : u_blockMix;
+            float largeMetric = cellMetric(largeCell, u_shapeMode);
+            float smallMetric = cellMetric(smallCell, u_shapeMode);
+            float largeTrack = mix(length(centered * 1.18), largeMetric, activeBlock);
+            float smallTrack = mix(length(centered * 1.72), smallMetric, activeBlock);
+            float scrollPush = u_scroll * u_scrollPower;
+
+            float t = (u_time * 0.2) + scrollPush + largeTrack;
+            float t2 = (u_time * 0.1) + scrollPush * 0.62 + smallTrack;
+
+            vec3 w = vec3(uv.x, uv.y, 1.0);
+            coswarp(w, u_warp);
+
+            uv.x += w.r;
+            uv.y += w.g;
+
+            float snakeScale = mix(8.0, 11.5, activeBlock);
+            float detailScale = mix(14.0, 22.0, activeBlock);
+            vec3 field = vec3(0.0, 0.5, uv2.x);
+            field.r = sin(u_time * 0.2 + scrollPush) + sin(length(uv - 0.5) * snakeScale);
+            field.g = sin(u_time * 0.3 + scrollPush * 0.7) + sin(length(uv - 0.5) * detailScale);
+
+            coswarp(field, u_warp);
+
+            float fieldBias = mix(0.18, 0.09, activeBlock);
+            float rawMask = smoothstep(field.r - fieldBias, sin(t2), sin(t));
+            float mask = smoothstep(0.08, mix(0.88, 0.96, activeBlock), rawMask);
+            float shine = smoothstep(0.50, 0.96, mask) * u_shine;
+            float trench = smoothstep(0.03, 0.36, mask);
+            float lowLift = mix(0.38, 0.18, u_darkness) + 0.075 * sin(u_time * 0.18 + uv2.y * 4.0);
+
+            vec3 darkBase = mix(u_colorB, u_colorA, 0.30) * lowLift;
+            vec3 color = mix(darkBase, u_colorB * mix(0.88, 0.64, u_darkness), trench);
+            color = mix(color, u_colorA * 0.94, mask * mix(0.50, 0.62, activeBlock));
+            color = mix(color, u_colorC, shine * 0.62);
+            color += u_colorC * pow(mask, 5.0) * (0.10 + 0.10 * u_shine);
+
+            float vignette = smoothstep(1.20, 0.10, length((uv2 - 0.5) * vec2(0.74, 0.92)));
+            color *= mix(0.74, 1.0, vignette);
+            color += mix(u_colorB, u_colorA, 0.42) * 0.05;
+            color = ((color - 0.5) * u_contrast + 0.5) * u_brightness;
+            color = clamp(color, vec3(0.025), vec3(1.0));
+
+            gl_FragColor = vec4(color, 1.0);
+          }
+        `;
+
+        const vertex = compileShader(gl.VERTEX_SHADER, vertexSource);
+        const fragment = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+        program = gl.createProgram();
+        gl.attachShader(program, vertex);
+        gl.attachShader(program, fragment);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+          throw new Error(gl.getProgramInfoLog(program) || "Program link failed");
+        }
+
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(
+          gl.ARRAY_BUFFER,
+          new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+          gl.STATIC_DRAW
+        );
+
+        gl.useProgram(program);
+        const position = gl.getAttribLocation(program, "a_position");
+        gl.enableVertexAttribArray(position);
+        gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+        uniforms = {
+          resolution: gl.getUniformLocation(program, "u_resolution"),
+          time: gl.getUniformLocation(program, "u_time"),
+          scroll: gl.getUniformLocation(program, "u_scroll"),
+          scrollPower: gl.getUniformLocation(program, "u_scrollPower"),
+          warp: gl.getUniformLocation(program, "u_warp"),
+          sliceLarge: gl.getUniformLocation(program, "u_sliceLarge"),
+          sliceSmall: gl.getUniformLocation(program, "u_sliceSmall"),
+          blockMix: gl.getUniformLocation(program, "u_blockMix"),
+          shapeMode: gl.getUniformLocation(program, "u_shapeMode"),
+          darkness: gl.getUniformLocation(program, "u_darkness"),
+          brightness: gl.getUniformLocation(program, "u_brightness"),
+          contrast: gl.getUniformLocation(program, "u_contrast"),
+          shine: gl.getUniformLocation(program, "u_shine"),
+          colorA: gl.getUniformLocation(program, "u_colorA"),
+          colorB: gl.getUniformLocation(program, "u_colorB"),
+          colorC: gl.getUniformLocation(program, "u_colorC"),
+        };
+
+        return true;
+      }
+
+      function pulseSwitch() {
+        document.body.classList.add("is-switching");
+        window.clearTimeout(switchTimer);
+        switchTimer = window.setTimeout(() => {
+          document.body.classList.remove("is-switching");
+        }, 1300);
+      }
+
+      function setControlValue(id, value, displayValue) {
+        const input = document.getElementById(id);
+        const output = document.getElementById(`${id}-value`);
+        if (input && document.activeElement !== input) {
+          input.value = String(value);
+        }
+        if (output && output.textContent !== String(displayValue ?? value)) {
+          output.textContent = displayValue ?? String(value);
+        }
+      }
+
+      function syncThemeOptions() {
+        themeSelect.innerHTML = config.themes
+          .map((theme, index) => `<option value="${index}">${theme.label}</option>`)
+          .join("");
+      }
+
+      function syncColorEditor(index) {
+        activeEditorIndex = index;
+        if (document.activeElement !== themeSelect) {
+          themeSelect.value = String(index);
+        }
+        config.themes[index].colors.forEach((color, colorIndex) => {
+          if (document.activeElement !== colorInputs[colorIndex]) {
+            colorInputs[colorIndex].value = color;
+          }
+          colorValues[colorIndex].textContent = color.toUpperCase();
+        });
+      }
+
+      function syncControls() {
+        syncColorEditor(activeIndexForProgress(getEffectiveProgress()));
+        setControlValue("logo-stroke", config.logo.stroke.toFixed(2), config.logo.stroke.toFixed(2));
+        setControlValue("logo-color-mix", config.logo.colorMix, `${config.logo.colorMix}%`);
+        setControlValue("logo-glow", config.logo.glow, `${config.logo.glow}%`);
+        setControlValue("logo-fuse", Math.round(config.logo.fuseGlow * 100), `${Math.round(config.logo.fuseGlow * 100)}%`);
+        setControlValue("logo-shadow", Math.round(config.logo.edgeShadow * 100), `${Math.round(config.logo.edgeShadow * 100)}%`);
+        if (document.activeElement !== bgShapeSelect) {
+          bgShapeSelect.value = config.background.shape;
+        }
+        setControlValue("bg-block", config.background.blockMix.toFixed(2), config.background.blockMix.toFixed(2));
+        setControlValue("bg-large", config.background.sliceLarge.toFixed(1), config.background.sliceLarge.toFixed(1));
+        setControlValue("bg-small", config.background.sliceSmall.toFixed(1), config.background.sliceSmall.toFixed(1));
+        setControlValue("bg-warp", config.background.warp.toFixed(2), config.background.warp.toFixed(2));
+        setControlValue("bg-darkness", config.background.darkness.toFixed(2), config.background.darkness.toFixed(2));
+        setControlValue("bg-brightness", config.background.brightness.toFixed(2), config.background.brightness.toFixed(2));
+        setControlValue("bg-shine", config.background.shine.toFixed(2), config.background.shine.toFixed(2));
+        setControlValue("motion-speed", config.motion.speed.toFixed(2), `${config.motion.speed.toFixed(2)}x`);
+        setControlValue("scroll-power", config.motion.scrollPower.toFixed(2), config.motion.scrollPower.toFixed(2));
+        setControlValue("progress-range", getEffectiveProgress().toFixed(3), getEffectiveProgress().toFixed(3));
+        setControlValue("bg-progress", config.motion.backgroundProgress.toFixed(3), config.motion.backgroundProgress.toFixed(3));
+        document.getElementById("manual-progress").checked = config.motion.manualProgress;
+        document.getElementById("pause-motion").checked = config.motion.paused;
+        if (document.activeElement !== captionTitleInput) {
+          captionTitleInput.value = config.caption.title;
+        }
+        if (document.activeElement !== captionDetailInput) {
+          captionDetailInput.value = config.caption.detail;
+        }
+      }
+
+      function applyVisualState({ syncUi = false } = {}) {
+        const progress = getEffectiveProgress();
+        const colors = paletteAt(progress);
+        const activeIndex = activeIndexForProgress(progress);
+        const activeTheme = config.themes[activeIndex];
+        const logoAccent = activeTheme.colors[activeTheme.logoColorIndex];
+        const logoColor = rgb01(logoAccent);
+        const logoMix = (activeTheme.key === "acid" ? config.logo.acidColorMix : config.logo.colorMix) / 100;
+
+        setRootProperty("--scroll-progress", progress.toFixed(4));
+        setRootProperty("--accent-a", rgbToCss(colors[0]));
+        setRootProperty("--accent-b", rgbToCss(colors[1]));
+        setRootProperty("--accent-c", rgbToCss(colors[2]));
+        setRootProperty("--logo-accent-a", activeTheme.colors[0]);
+        setRootProperty("--logo-accent-c", logoAccent);
+        setRootProperty("--logo-color", rgbToCss(logoColor.map((channel) => mixNumber(1, channel, logoMix))));
+        setRootProperty("--logo-stroke", config.logo.stroke.toFixed(2));
+        setRootProperty("--logo-wrap-glow", `${config.logo.wrapGlow}%`);
+        setRootProperty("--logo-glow-strength", `${config.logo.glow}%`);
+        setRootProperty("--logo-white-glow", `${Math.round(config.logo.fuseGlow * 100)}%`);
+        setRootProperty("--logo-edge-shadow", config.logo.edgeShadow.toFixed(3));
+        const fuseOpacity = config.logo.fuseGlow.toFixed(2);
+        if (logoFuseFlood.getAttribute("flood-opacity") !== fuseOpacity) {
+          logoFuseFlood.setAttribute("flood-opacity", fuseOpacity);
+        }
+        setTextIfChanged(captionTitle, config.caption.title);
+        setTextIfChanged(captionDetail, config.caption.detail);
+
+        if (gl && program) {
+          gl.useProgram(program);
+          gl.uniform3fv(uniforms.colorA, colors[0]);
+          gl.uniform3fv(uniforms.colorB, colors[1]);
+          gl.uniform3fv(uniforms.colorC, colors[2]);
+          gl.uniform1f(uniforms.scrollPower, config.motion.scrollPower);
+          gl.uniform1f(uniforms.warp, config.background.warp);
+          gl.uniform1f(uniforms.sliceLarge, config.background.sliceLarge);
+          gl.uniform1f(uniforms.sliceSmall, config.background.sliceSmall);
+          gl.uniform1f(uniforms.blockMix, config.background.blockMix);
+          gl.uniform1f(uniforms.shapeMode, shapeModeValue(config.background.shape));
+          gl.uniform1f(uniforms.darkness, config.background.darkness);
+          gl.uniform1f(uniforms.brightness, config.background.brightness);
+          gl.uniform1f(uniforms.contrast, config.background.contrast);
+          gl.uniform1f(uniforms.shine, config.background.shine);
+        }
+
+        if (activeIndex !== lastActiveIndex) {
+          lastActiveIndex = activeIndex;
+          pulseSwitch();
+        }
+        setTextIfChanged(themeLabel, activeTheme.label);
+        if (themeButton.dataset.themeIndex !== String(activeIndex)) {
+          themeButton.dataset.themeIndex = String(activeIndex);
+          themeButton.setAttribute("aria-label", `${activeTheme.label}色系，点击切换到下一色系`);
+        }
+        if (syncUi) {
+          syncControls();
+        }
+        return progress;
+      }
+
+      function renderFallback() {
+        const progress = applyVisualState();
+        const color = hexToRgb(config.themes[activeIndexForProgress(progress)].colors[0]);
+        fallbackCtx.fillStyle = "#000";
+        fallbackCtx.fillRect(0, 0, width, height);
+        fallbackCtx.globalCompositeOperation = "lighter";
+        for (let y = -40; y < height + 40; y += 18) {
+          fallbackCtx.beginPath();
+          for (let x = -40; x < width + 40; x += 16) {
+            const yy = y + Math.sin(x * 0.022 + y * 0.018 + motionClock * 1.6) * 42;
+            if (x === -40) fallbackCtx.moveTo(x, yy);
+            else fallbackCtx.lineTo(x, yy);
+          }
+          fallbackCtx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.08)`;
+          fallbackCtx.lineWidth = 1.2;
+          fallbackCtx.stroke();
+        }
+      }
+
+      function render(ms) {
+        const panelOpen = configPanel.dataset.open === "true";
+        if (panelOpen && ms - lastDrawMs < 28) {
+          requestAnimationFrame(render);
+          return;
+        }
+        lastDrawMs = ms;
+
+        if (!lastFrameMs) {
+          lastFrameMs = ms;
+        }
+        const delta = Math.min(0.05, Math.max(0, (ms - lastFrameMs) * 0.001));
+        lastFrameMs = ms;
+        if (!config.motion.paused) {
+          motionClock += delta * config.motion.speed;
+        }
+
+        if (!gl || !program) {
+          renderFallback();
+          requestAnimationFrame(render);
+          return;
+        }
+
+        gl.useProgram(program);
+        const progress = applyVisualState();
+        gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+        gl.uniform1f(uniforms.time, motionClock);
+        gl.uniform1f(uniforms.scroll, getBackgroundProgress(progress));
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        requestAnimationFrame(render);
+      }
+
+      function jumpToTheme(index, forceManual = false) {
+        const target = index / Math.max(1, config.themes.length - 1);
+        if (forceManual || config.motion.manualProgress) {
+          config.motion.manualProgress = true;
+          config.motion.progress = target;
+          applyVisualState({ syncUi: true });
+          return;
+        }
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        window.scrollTo({ top: max * target, behavior: "smooth" });
+      }
+
+      function advanceTheme(event) {
+        event?.preventDefault();
+        const now = performance.now();
+        if (now - themeAdvanceTimer < 240) {
+          return;
+        }
+        themeAdvanceTimer = now;
+        pulseSwitch();
+        jumpToTheme((activeIndexForProgress(getEffectiveProgress()) + 1) % config.themes.length, true);
+      }
+
+      function isThemeSwitcherPoint(event) {
+        if (!themeSwitcher || typeof event.clientX !== "number" || typeof event.clientY !== "number") {
+          return false;
+        }
+        const rect = themeSwitcher.getBoundingClientRect();
+        return (
+          event.clientX >= rect.left - 10 &&
+          event.clientX <= rect.right + 10 &&
+          event.clientY >= rect.top - 10 &&
+          event.clientY <= rect.bottom + 10
+        );
+      }
+
+      function enterManual(event) {
+        if (!manualLink || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+          return;
+        }
+        event.preventDefault();
+        configPanel.dataset.open = "false";
+        configToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.add("is-bridge-leaving");
+        config.motion.paused = false;
+        window.setTimeout(() => {
+          window.location.href = manualLink.href;
+        }, 980);
+      }
+
+      function bindRange(id, setter) {
+        const input = document.getElementById(id);
+        input.addEventListener("input", () => {
+          setter(parseFloat(input.value));
+          applyVisualState({ syncUi: true });
+        });
+      }
+
+      function initControls() {
+        syncThemeOptions();
+        configToggle.addEventListener("click", () => {
+          configPanel.dataset.open = "true";
+          configToggle.setAttribute("aria-expanded", "true");
+          applyVisualState({ syncUi: true });
+        });
+        configClose.addEventListener("click", () => {
+          configPanel.dataset.open = "false";
+          configToggle.setAttribute("aria-expanded", "false");
+        });
+        configReset.addEventListener("click", () => {
+          Object.assign(config.logo, JSON.parse(JSON.stringify(BRAND_CONFIG.logo)));
+          Object.assign(config.background, JSON.parse(JSON.stringify(BRAND_CONFIG.background)));
+          Object.assign(config.motion, JSON.parse(JSON.stringify(BRAND_CONFIG.motion)));
+          Object.assign(config.caption, JSON.parse(JSON.stringify(BRAND_CONFIG.caption)));
+          config.themes.splice(0, config.themes.length, ...JSON.parse(JSON.stringify(BRAND_CONFIG.themes)));
+          motionClock = 0;
+          syncThemeOptions();
+          applyVisualState({ syncUi: true });
+        });
+        themeSelect.addEventListener("change", () => {
+          activeEditorIndex = parseInt(themeSelect.value, 10);
+          config.motion.manualProgress = true;
+          config.motion.progress = activeEditorIndex / Math.max(1, config.themes.length - 1);
+          syncColorEditor(activeEditorIndex);
+          applyVisualState({ syncUi: true });
+        });
+        colorInputs.forEach((input, index) => {
+          input.addEventListener("input", () => {
+            config.themes[activeEditorIndex].colors[index] = input.value.toUpperCase();
+            colorValues[index].textContent = input.value.toUpperCase();
+            applyVisualState({ syncUi: true });
+          });
+        });
+        bgShapeSelect.addEventListener("change", () => {
+          config.background.shape = bgShapeSelect.value;
+          applyVisualState({ syncUi: true });
+        });
+        bindRange("logo-stroke", (value) => { config.logo.stroke = value; });
+        bindRange("logo-color-mix", (value) => { config.logo.colorMix = value; config.logo.acidColorMix = Math.max(20, value - 6); });
+        bindRange("logo-glow", (value) => { config.logo.glow = value; config.logo.wrapGlow = Math.round(value * 0.74); });
+        bindRange("logo-fuse", (value) => { config.logo.fuseGlow = value / 100; });
+        bindRange("logo-shadow", (value) => { config.logo.edgeShadow = value / 100; });
+        bindRange("bg-block", (value) => { config.background.blockMix = value; });
+        bindRange("bg-large", (value) => { config.background.sliceLarge = value; });
+        bindRange("bg-small", (value) => { config.background.sliceSmall = value; });
+        bindRange("bg-warp", (value) => { config.background.warp = value; });
+        bindRange("bg-darkness", (value) => { config.background.darkness = value; });
+        bindRange("bg-brightness", (value) => { config.background.brightness = value; });
+        bindRange("bg-shine", (value) => { config.background.shine = value; });
+        bindRange("motion-speed", (value) => { config.motion.speed = value; });
+        bindRange("scroll-power", (value) => { config.motion.scrollPower = value; });
+        bindRange("progress-range", (value) => {
+          config.motion.manualProgress = true;
+          config.motion.progress = value;
+        });
+        bindRange("bg-progress", (value) => { config.motion.backgroundProgress = value; });
+        document.getElementById("manual-progress").addEventListener("change", (event) => {
+          config.motion.manualProgress = event.target.checked;
+          if (config.motion.manualProgress) {
+            config.motion.progress = getEffectiveProgress();
+          }
+          applyVisualState({ syncUi: true });
+        });
+        document.getElementById("pause-motion").addEventListener("change", (event) => {
+          config.motion.paused = event.target.checked;
+          applyVisualState({ syncUi: true });
+        });
+        captionTitleInput.addEventListener("input", () => {
+          config.caption.title = captionTitleInput.value;
+          applyVisualState();
+        });
+        captionDetailInput.addEventListener("input", () => {
+          config.caption.detail = captionDetailInput.value;
+          applyVisualState();
+        });
+      }
+
+      themeSwitcher.addEventListener("pointerdown", advanceTheme);
+      themeButton.addEventListener("click", advanceTheme);
+      manualLink?.addEventListener("click", enterManual);
+      document.addEventListener("pointerdown", (event) => {
+        if (isThemeSwitcherPoint(event)) {
+          advanceTheme(event);
+        }
+      }, true);
+
+      try {
+        createShaderBackground();
+      } catch (error) {
+        console.warn(error);
+        gl = null;
+        fallbackCtx = canvas.getContext("2d");
+      }
+
+      initControls();
+      resize();
+      applyVisualState({ syncUi: true });
+      window.addEventListener("resize", resize);
+      requestAnimationFrame(render);
+    </script>
+  </body>
+</html>

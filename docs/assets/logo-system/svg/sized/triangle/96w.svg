@@ -1,0 +1,27 @@
+<svg id="seasnake-logo-triangle" xmlns="http://www.w3.org/2000/svg" width="96" height="72" viewBox="0 0 826.87 618.54" role="img" aria-labelledby="title desc" style="color:#111111">
+  <title id="title">SEASNAKE triangle logo</title>
+  <desc id="desc">Primary triangle logo with two-row SEASNAKE wordmark.</desc>
+  <defs>
+    <symbol id="seasnake-logo-triangle-symbol" viewBox="0 0 826.87 618.54">
+      <g fill="none" stroke="currentColor" stroke-width="9.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M419.44 36 L790.87 582.54 L36 582.54 Z" />
+        <path d="M378.15 188.94 L305.61 258.94 L362.03 258.94 L292.26 335.52" />
+        <line x1="382.03" y1="258.94" x2="433.03" y2="258.94" />
+        <path d="M422.44 188.94 L382.03 258.94 L422.44 328.94" />
+        <line x1="478.30" y1="258.94" x2="521.05" y2="258.94" />
+        <path d="M462.78 328.94 L485.03 188.94" />
+        <path d="M485.03 188.94 L565.86 328.94" />
+        <path d="M285.26 365.94 L192.15 441.94 L247.03 441.94 L155.44 518.94" />
+        <path d="M232.03 517.94 L319.79 365.94 L292.79 517.94 L380.54 365.94" />
+        <line x1="376.35" y1="441.94" x2="453.70" y2="441.94" />
+        <path d="M327.27 517.94 L415.03 365.94 L502.79 517.94" />
+        <path d="M491.91 441.94 L535.79 365.94" />
+        <path d="M491.91 441.94 L601.54 517.94" />
+        <path d="M448.03 365.94 L535.79 517.94" />
+        <line x1="543.34" y1="441.94" x2="631.10" y2="441.94" />
+        <path d="M587.22 365.94 L543.34 441.94 L672.98 518.94" />
+      </g>
+    </symbol>
+  </defs>
+  <use href="#seasnake-logo-triangle-symbol" />
+</svg>

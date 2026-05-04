@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SEASNAKE Logo System Preview</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 32px;
+        color: #111;
+        background: #efefe8;
+        font-family: Inter, Arial, "PingFang SC", sans-serif;
+      }
+      main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      article {
+        min-height: 360px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 18px;
+        padding: 22px;
+        border: 1px solid rgba(17, 17, 17, .18);
+        background: #fbfbf5;
+      }
+      article.dark {
+        color: #fbfbf5;
+        background: #080b0a;
+        border-color: rgba(251, 251, 245, .18);
+      }
+      h2 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .stage {
+        display: grid;
+        place-items: center;
+        min-height: 260px;
+      }
+      img {
+        display: block;
+        width: min(78%, var(--asset-width, 360px));
+        max-height: 260px;
+      }
+      article.dark img {
+        filter: invert(1);
+      }
+      .snake img { --asset-width: 220px; }
+      .triangle img { --asset-width: 360px; }
+      .wordmark img { --asset-width: 480px; }
+      .combo img { --asset-width: 560px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <article class="snake">
+        <h2>snake</h2>
+        <div class="stage"><img src="svg/seasnake-logo-snake.svg" alt="SEASNAKE snake logo"></div>
+      </article>
+      <article class="triangle">
+        <h2>triangle</h2>
+        <div class="stage"><img src="svg/seasnake-logo-triangle.svg" alt="SEASNAKE triangle logo"></div>
+      </article>
+      <article class="wordmark dark">
+        <h2>horizontal wordmark</h2>
+        <div class="stage"><img src="svg/seasnake-logo-wordmark-horizontal.svg" alt="SEASNAKE horizontal wordmark"></div>
+      </article>
+      <article class="combo dark">
+        <h2>snake + two-row wordmark</h2>
+        <div class="stage"><img src="svg/seasnake-logo-snake-two-row.svg" alt="SEASNAKE snake and two-row wordmark"></div>
+      </article>
+    </main>
+  </body>
+</html>

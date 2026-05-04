@@ -1,0 +1,20 @@
+<svg id="seasnake-logo-snake" xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 310 320" role="img" aria-labelledby="title desc" style="color:#111111">
+  <title id="title">SEASNAKE snake logo</title>
+  <desc id="desc">Standalone snake symbol using the original stroke geometry, optically reduced from the former heavy line weight.</desc>
+  <defs>
+    <symbol id="seasnake-logo-snake-symbol" viewBox="0 0 310 320">
+      <g transform="translate(0 7) scale(.2472)" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M282 685 L282 240 C282 214 306 195 332 195 L880 195" />
+        <path d="M970 655 L970 955 C970 988 946 1014 912 1014 L425 1014" />
+        <path d="M482 579 L970 579" />
+        <path d="M384 529 C500 536 586 466 674 378 C738 314 799 240 842 253" />
+        <path d="M731 344 C755 398 817 423 856 382 C879 358 873 317 837 316 L824 318" />
+        <path d="M425 284 L459 390" />
+        <path d="M352 691 L525 691 C548 688 570 675 594 664" />
+        <path d="M505 697 L481 815" />
+        <path d="M315 1014 C435 928 579 819 704 749 C781 706 860 711 878 769 C895 826 834 870 764 850" />
+      </g>
+    </symbol>
+  </defs>
+  <use href="#seasnake-logo-snake-symbol" />
+</svg>

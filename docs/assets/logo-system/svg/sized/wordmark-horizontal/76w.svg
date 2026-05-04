@@ -1,0 +1,24 @@
+<svg id="seasnake-logo-wordmark-horizontal" xmlns="http://www.w3.org/2000/svg" width="76" height="21" viewBox="0 0 735 205" role="img" aria-labelledby="title desc" style="color:#111111">
+  <title id="title">SEASNAKE horizontal wordmark</title>
+  <desc id="desc">Horizontal SEASNAKE wordmark for headers, banners, and narrow compositions.</desc>
+  <defs>
+    <symbol id="seasnake-logo-wordmark-horizontal-symbol" viewBox="0 0 735 205">
+      <clipPath id="seasnake-wordmark-horizontal-cut" clipPathUnits="userSpaceOnUse">
+        <polygon points="2.192 36.852 737.192 36.852 735 180 0 180" />
+      </clipPath>
+      <g clip-path="url(#seasnake-wordmark-horizontal-cut)">
+        <g transform="translate(10.5 0)" fill="none" stroke="currentColor" stroke-width="12.6" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.2">
+          <path d="M59.279 33.957 L19.511 112 H74.39 L35.131 188" />
+          <path d="M150 28 L98.314 112 L162 188 M98.314 112 H166" />
+          <path d="M175.1 188 L218.826 28 M221.7 28 L253.023 188 M175.1 112 H238.763" />
+          <path d="M309.256 32.719 L271.435 112 H326.314 L287.054 188" />
+          <polyline points="344.212 188 377.137 28 402.323 188 437.764 28" />
+          <path d="M456.023 188 L499.752 28 M502.6 28 L533.949 188 M456.023 112 H519.689" />
+          <path d="M546.9 28 L588.1 188 M576 112 L632 22 M574.182 106.852 L636.541 182.852" />
+          <path d="M679 28 L627 110 L691 188 M627 112 H695" />
+        </g>
+      </g>
+    </symbol>
+  </defs>
+  <use href="#seasnake-logo-wordmark-horizontal-symbol" />
+</svg>

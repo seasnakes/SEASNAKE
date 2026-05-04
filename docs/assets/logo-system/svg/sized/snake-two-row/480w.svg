@@ -1,0 +1,41 @@
+<svg id="seasnake-logo-snake-two-row" xmlns="http://www.w3.org/2000/svg" width="480" height="320" viewBox="0 0 960 640" role="img" aria-labelledby="title desc" style="color:#111111">
+  <title id="title">SEASNAKE snake and two-row wordmark</title>
+  <desc id="desc">Snake symbol paired with two-row SEASNAKE wordmark, cleaned from the supplied double-row reference.</desc>
+  <defs>
+    <clipPath id="seasnake-two-row-bottom-cut" clipPathUnits="userSpaceOnUse">
+      <polygon points="446.01 494.8 448.2 351.66 932.19 351.68 930 494.83" />
+    </clipPath>
+    <clipPath id="seasnake-two-row-top-cut" clipPathUnits="userSpaceOnUse">
+      <polygon points="446.49 321.45 448.68 178.3 1189.68 178.3 1187.49 321.45" />
+    </clipPath>
+    <symbol id="seasnake-logo-snake-two-row-symbol" viewBox="0 0 960 640">
+      <g clip-path="url(#seasnake-two-row-bottom-cut)">
+        <g fill="none" stroke="currentColor" stroke-width="12.6" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.2">
+          <path d="M504.26 347.55 L466.44 426.83 H521.32 L482.06 502.83" />
+          <polyline points="539.21 502.83 572.14 342.83 597.32 502.83 632.76 342.83" />
+          <path d="M651.02 502.83 L694.75 342.83 M697.6 342.83 L728.95 502.83 M651.02 426.83 H714.69" />
+          <path d="M741.9 342.83 L783.1 502.83 M771 426.83 L827 336.83 M769.18 421.68 L831.54 497.68" />
+          <path d="M874 342.83 L822 424.83 L886 502.83 M822 426.83 H890" />
+        </g>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="9.89">
+        <path d="M125.05 367.68v-171.99c0-10.05 9.48-17.39 19.75-17.39h216.43" />
+        <path d="M396.77 356.08v115.95c0 12.75-9.48 22.8-22.91 22.8H181.52" />
+        <path d="M204.04 326.71h192.74" />
+        <path d="M165.33 307.39c45.81 2.71 79.78-24.35 114.54-58.36 25.28-24.74 49.37-53.34 66.35-48.31-8.69 4.25-32.04 5.24-43.84 35.17 9.48 20.87 33.97 30.53 49.37 14.69 9.08-9.28 6.71-25.12-7.5-25.51l-5.13.77" />
+        <path d="M181.53 212.7l13.43 40.97" />
+        <path d="M152.69 370h68.33c9.08-1.16 17.77-6.18 27.25-10.44" />
+        <path d="M213.12 372.32l-9.48 45.61" />
+        <path d="M138.08 494.83c47.39-33.24 104.27-75.36 153.64-102.42 30.41-16.62 61.61-14.69 68.72 7.73 6.71 22.03-17.38 39.04-45.02 31.31" />
+      </g>
+      <g clip-path="url(#seasnake-two-row-top-cut)">
+        <g fill="none" stroke="currentColor" stroke-width="12.6" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.2">
+          <path d="M505.77 175.4 L466 253.44 H520.88 L481.62 329.44" />
+          <path d="M596.49 169.45 L544.8 253.45 L608.49 329.45 M544.81 253.45 H612.5" />
+          <path d="M621.59 329.45 L665.32 169.45 M668.19 169.45 L699.51 329.45 M621.59 253.45 H685.25" />
+        </g>
+      </g>
+    </symbol>
+  </defs>
+  <use href="#seasnake-logo-snake-two-row-symbol" />
+</svg>
