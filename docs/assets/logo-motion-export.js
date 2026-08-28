@@ -83,7 +83,7 @@
 
     const [width, height] = elements.resolution.value.split("x").map(Number);
     const fps = Number(elements.fps.value);
-    const duration = preset === "manual" ? 2.6 : 8;
+    const duration = preset === "manual" ? 2.44 : 8;
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
@@ -256,6 +256,8 @@
 
   function renderManualFrame(context, width, height, seconds) {
     const milliseconds = seconds * 1000;
+    const duration = 2440;
+    const fadeStart = duration * 0.88;
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.globalAlpha = 1;
     context.globalCompositeOperation = "source-over";
@@ -273,18 +275,16 @@
     context.fillRect(0, 0, width, height);
 
     drawManualBeam(context, width, height, seconds, accent);
-    const fadeIn = easeOutCubic(clamp(milliseconds / 260, 0, 1));
-    const fadeOut = 1 - easeInOutCubic(clamp((milliseconds - 2290) / 310, 0, 1));
-    const opacity = fadeIn * fadeOut;
+    const fadeOut = 1 - arrivalEase(clamp((milliseconds - fadeStart) / (duration - fadeStart), 0, 1));
     drawLogo(context, width, height, {
-      progressForPath: (path) => easeInOutCubic(clamp((milliseconds - path.delay) / 860, 0, 1)),
+      progressForPath: (path) => arrivalEase(clamp((milliseconds - path.delay) / 860, 0, 1)),
       color: mixHex("#FBFBF5", accent, 0.16),
       glowColor: accent,
-      opacity,
+      opacity: fadeOut,
       scaleFactor: 0.68,
     });
 
-    const labelProgress = easeOutCubic(clamp((milliseconds - 430) / 620, 0, 1));
+    const labelProgress = cssEase(clamp((milliseconds - 430) / 560, 0, 1));
     context.save();
     context.globalAlpha = labelProgress * fadeOut * 0.82;
     context.fillStyle = "#FBFBF5";
@@ -294,8 +294,8 @@
     context.fillText("SEASNAKE  ·  BRAND MANUAL", centerX, height * 0.91);
     context.restore();
 
-    if (milliseconds > 2290) {
-      context.fillStyle = `rgba(5,7,7,${easeInOutCubic(clamp((milliseconds - 2290) / 310, 0, 1))})`;
+    if (milliseconds > fadeStart) {
+      context.fillStyle = `rgba(5,7,7,${1 - fadeOut})`;
       context.fillRect(0, 0, width, height);
     }
   }
@@ -303,7 +303,8 @@
   function renderViFrame(context, width, height, seconds, previewApi) {
     const duration = 8;
     const themeProgress = smoothThemeProgress(seconds / duration);
-    previewApi.renderFrame(themeProgress, seconds);
+    const backgroundPhase = Math.min(themeProgress, 0.9995);
+    previewApi.renderFrame(themeProgress, seconds, backgroundPhase);
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.globalAlpha = 1;
     context.globalCompositeOperation = "source-over";
@@ -591,6 +592,36 @@
 
   function easeInOutCubic(value) {
     return value < 0.5 ? 4 * value ** 3 : 1 - ((-2 * value + 2) ** 3) / 2;
+  }
+
+  function arrivalEase(value) {
+    return cubicBezier(value, 0.18, 0.82, 0.2, 1);
+  }
+
+  function cssEase(value) {
+    return cubicBezier(value, 0.25, 0.1, 0.25, 1);
+  }
+
+  function cubicBezier(value, x1, y1, x2, y2) {
+    const target = clamp(value, 0, 1);
+    let lower = 0;
+    let upper = 1;
+    let parameter = target;
+    for (let index = 0; index < 14; index += 1) {
+      const x = bezierCoordinate(parameter, x1, x2);
+      if (Math.abs(x - target) < 0.00001) break;
+      if (x < target) lower = parameter;
+      else upper = parameter;
+      parameter = (lower + upper) / 2;
+    }
+    return bezierCoordinate(parameter, y1, y2);
+  }
+
+  function bezierCoordinate(parameter, control1, control2) {
+    const inverse = 1 - parameter;
+    return 3 * inverse * inverse * parameter * control1
+      + 3 * inverse * parameter * parameter * control2
+      + parameter * parameter * parameter;
   }
 
   function delay(milliseconds) {

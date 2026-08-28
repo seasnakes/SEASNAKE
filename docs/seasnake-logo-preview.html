@@ -1642,7 +1642,7 @@
         requestAnimationFrame(render);
       }
 
-      function renderExportFrame(progress, seconds) {
+      function renderExportFrame(progress, seconds, backgroundProgress = progress) {
         config.motion.manualProgress = true;
         config.motion.progress = clamp(progress, 0, 1);
         config.motion.paused = true;
@@ -1654,10 +1654,11 @@
         }
 
         gl.useProgram(program);
-        const appliedProgress = applyVisualState();
+        applyVisualState();
         gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
         gl.uniform1f(uniforms.time, motionClock);
-        gl.uniform1f(uniforms.scroll, getBackgroundProgress(appliedProgress));
+        const exportBackgroundProgress = (clamp(backgroundProgress, 0, 0.9995) + config.motion.backgroundProgress) % 1;
+        gl.uniform1f(uniforms.scroll, exportBackgroundProgress);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.finish();
         return { width: canvas.width, height: canvas.height };
