@@ -183,6 +183,97 @@
           </div>
         </section>
       </div>
+
+      <section class="motion-studio" id="motion-export" aria-labelledby="motion-title">
+        <svg class="motion-symbols" aria-hidden="true">
+          <symbol id="motion-logo-mark" viewBox="0 0 826 619">
+            <path d="M419.44 36 L790.87 582.54 L36 582.54 Z" />
+            <path d="M378.15 188.94 L305.61 258.94 L362.03 258.94 L292.26 335.52" />
+            <line x1="382.03" y1="258.94" x2="433.03" y2="258.94" />
+            <path d="M422.44 188.94 L382.03 258.94 L422.44 328.94" />
+            <line x1="478.30" y1="258.94" x2="521.05" y2="258.94" />
+            <path d="M462.78 328.94 L485.03 188.94" />
+            <path d="M485.03 188.94 L565.86 328.94" />
+            <path d="M285.26 365.94 L192.15 441.94 L247.03 441.94 L155.44 518.94" />
+            <path d="M232.03 517.94 L319.79 365.94 L292.79 517.94 L380.54 365.94" />
+            <line x1="376.35" y1="441.94" x2="453.70" y2="441.94" />
+            <path d="M327.27 517.94 L415.03 365.94 L502.79 517.94" />
+            <path d="M491.91 441.94 L535.79 365.94" />
+            <path d="M491.91 441.94 L601.54 517.94" />
+            <path d="M448.03 365.94 L535.79 517.94" />
+            <line x1="543.34" y1="441.94" x2="631.10" y2="441.94" />
+            <path d="M587.22 365.94 L543.34 441.94 L672.98 518.94" />
+          </symbol>
+        </svg>
+
+        <div class="motion-heading">
+          <div>
+            <span class="eyebrow">MOTION EXPORT · LOCAL VIDEO</span>
+            <h2 id="motion-title">把页面里的 Logo 动画也带走</h2>
+          </div>
+          <p>两套动画直接复用现有路径与动态背景。浏览器在本机实时录制，不上传素材；Chrome 导出 WebM，兼容浏览器会自动选择可用的视频格式。</p>
+        </div>
+
+        <div class="motion-settings" aria-label="动画导出参数">
+          <label>
+            <span>分辨率</span>
+            <select id="motion-resolution">
+              <option value="1280x720">HD · 1280 × 720</option>
+              <option value="1920x1080" selected>Full HD · 1920 × 1080</option>
+              <option value="2560x1440">2K · 2560 × 1440</option>
+              <option value="1080x1080">方形 · 1080 × 1080</option>
+            </select>
+          </label>
+          <label>
+            <span>帧率</span>
+            <select id="motion-fps">
+              <option value="30" selected>30 FPS</option>
+              <option value="60">60 FPS</option>
+            </select>
+          </label>
+          <span class="motion-local-note"><i></i>无音轨 · 实时录制 · 本机完成</span>
+        </div>
+
+        <div class="motion-grid">
+          <article class="motion-card motion-card-manual">
+            <div class="motion-card-preview" aria-hidden="true">
+              <div class="motion-beam"></div>
+              <svg viewBox="0 0 826 619"><use href="#motion-logo-mark"></use></svg>
+              <span>BRAND MANUAL</span>
+            </div>
+            <div class="motion-card-body">
+              <div>
+                <span class="motion-kicker">MANUAL ARRIVAL · 2.6 SEC</span>
+                <h3>品牌手册三角 Logo 入场</h3>
+                <p>对应从动态首页进入 Manual 时的逐笔描边、光束扫过与标题显现。</p>
+              </div>
+              <div class="motion-card-actions">
+                <a href="seasnake-ouroboros-concepts.html?from=preview#top">查看原动画</a>
+                <button class="motion-export-button" id="export-manual-motion" type="button">导出视频</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="motion-card motion-card-vi">
+            <div class="motion-card-preview" aria-hidden="true">
+              <div class="motion-fluid"></div>
+              <svg viewBox="0 0 826 619"><use href="#motion-logo-mark"></use></svg>
+              <span>CYAN · ACID · ROSE</span>
+            </div>
+            <div class="motion-card-body">
+              <div>
+                <span class="motion-kicker">VI PREVIEW · 8 SEC</span>
+                <h3>动态 VI 三色预览</h3>
+                <p>对应 seasnake-logo-preview.html?from=vi，保留真实 WebGL 背景、品牌色过渡与 Logo 运动。</p>
+              </div>
+              <div class="motion-card-actions">
+                <a href="seasnake-logo-preview.html?from=vi">查看原动画</a>
+                <button class="motion-export-button" id="export-vi-motion" type="button">导出视频</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
 
     <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
@@ -197,5 +288,6 @@
     </div>
 
     <script src="assets/logo-export-studio.js"></script>
+    <script src="assets/logo-motion-export.js"></script>
   </body>
 </html>

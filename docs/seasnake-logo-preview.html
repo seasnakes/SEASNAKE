@@ -1143,6 +1143,7 @@
         },
       };
 
+      const PREVIEW_EXPORT_MODE = new URLSearchParams(window.location.search).get("export") === "1";
       const config = JSON.parse(JSON.stringify(BRAND_CONFIG));
       const root = document.documentElement;
       const canvas = document.getElementById("bg-canvas");
@@ -1280,7 +1281,7 @@
       }
 
       function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        dpr = PREVIEW_EXPORT_MODE ? 1 : Math.min(window.devicePixelRatio || 1, 2);
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = Math.floor(width * dpr);
@@ -1311,6 +1312,7 @@
           depth: false,
           stencil: false,
           premultipliedAlpha: false,
+          preserveDrawingBuffer: PREVIEW_EXPORT_MODE,
         });
 
         if (!gl) {
@@ -1640,6 +1642,27 @@
         requestAnimationFrame(render);
       }
 
+      function renderExportFrame(progress, seconds) {
+        config.motion.manualProgress = true;
+        config.motion.progress = clamp(progress, 0, 1);
+        config.motion.paused = true;
+        motionClock = Math.max(0, seconds) * config.motion.speed;
+
+        if (!gl || !program) {
+          renderFallback();
+          return { width: canvas.width, height: canvas.height };
+        }
+
+        gl.useProgram(program);
+        const appliedProgress = applyVisualState();
+        gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+        gl.uniform1f(uniforms.time, motionClock);
+        gl.uniform1f(uniforms.scroll, getBackgroundProgress(appliedProgress));
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        gl.finish();
+        return { width: canvas.width, height: canvas.height };
+      }
+
       function jumpToTheme(index, forceManual = false) {
         const target = progressForThemeIndex(index);
         if (forceManual || config.motion.manualProgress) {
@@ -1797,6 +1820,11 @@
         window.scrollTo({ top: max * defaultThemeProgress(), behavior: "auto" });
       }
       applyVisualState({ syncUi: true });
+      window.SEASNAKE_PREVIEW_EXPORT = {
+        ready: true,
+        canvas,
+        renderFrame: renderExportFrame,
+      };
       window.addEventListener("resize", resize);
       requestAnimationFrame(render);
     </script>

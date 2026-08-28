@@ -24,7 +24,9 @@ jobs:
           node-version: 22
 
       - name: Check export script syntax
-        run: node --check docs/assets/logo-export-studio.js
+        run: |
+          node --check docs/assets/logo-export-studio.js
+          node --check docs/assets/logo-motion-export.js
 
       - name: Validate static pages and assets
         run: node scripts/validate-static-site.mjs
