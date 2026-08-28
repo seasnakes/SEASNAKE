@@ -7,28 +7,28 @@
       name: "蛇形标",
       slug: "snake",
       path: "assets/logo-system/svg/seasnake-logo-snake.svg",
-      sizes: [40, 64, 96, 128],
+      sizes: [512, 1024, 2048, 4096],
     },
     {
       id: "triangle",
       name: "三角主标",
       slug: "triangle",
       path: "assets/logo-system/svg/seasnake-logo-triangle.svg",
-      sizes: [40, 64, 96, 128],
+      sizes: [512, 1024, 2048, 4096],
     },
     {
       id: "wordmark-horizontal",
       name: "横版字标",
       slug: "wordmark-horizontal",
       path: "assets/logo-system/svg/seasnake-logo-wordmark-horizontal.svg",
-      sizes: [76, 112, 164, 220],
+      sizes: [512, 1024, 2048, 4096],
     },
     {
       id: "snake-two-row",
       name: "蛇形双排组合",
       slug: "snake-two-row",
       path: "assets/logo-system/svg/seasnake-logo-snake-two-row.svg",
-      sizes: [240, 360, 480, 640],
+      sizes: [512, 1024, 2048, 4096],
     },
   ];
 
@@ -44,7 +44,7 @@
     activeColorId: "acid",
     format: "png",
     sizeMode: "standard",
-    customSizes: [128, 256, 512],
+    customSizes: [512, 1024, 2048, 4096],
     canvasMode: "fit",
     padding: 8,
     backgroundMode: "transparent",
@@ -278,7 +278,7 @@
           path: null,
           previewPath: blobUrl,
           source,
-          sizes: [128, 256, 512, 1024],
+          sizes: [512, 1024, 2048, 4096],
           selected: true,
           custom: true,
         });
@@ -631,6 +631,7 @@
     const doc = parser.parseFromString(logo.source, "image/svg+xml");
     const svg = doc.documentElement;
     const color = normalizeHex(colorHex);
+    stabilizeRootSymbolUses(svg);
     const geometry = assetGeometry(logo, targetWidth, options);
 
     svg.setAttribute("viewBox", geometry.viewBox.join(" "));
@@ -692,6 +693,22 @@
       width,
       height,
     };
+  }
+
+  function stabilizeRootSymbolUses(svg) {
+    const sourceViewBox = svg.getAttribute("viewBox").trim().split(/[\s,]+/).map(Number);
+    const [sourceX, sourceY, sourceWidth, sourceHeight] = sourceViewBox;
+    Array.from(svg.children).forEach((node) => {
+      if (node.localName !== "use") return;
+      const href = node.getAttribute("href") || node.getAttribute("xlink:href") || "";
+      if (!href.startsWith("#")) return;
+      const referenced = svg.ownerDocument.getElementById(href.slice(1));
+      if (!referenced || referenced.localName !== "symbol") return;
+      if (!node.hasAttribute("x")) node.setAttribute("x", String(sourceX));
+      if (!node.hasAttribute("y")) node.setAttribute("y", String(sourceY));
+      if (!node.hasAttribute("width")) node.setAttribute("width", String(sourceWidth));
+      if (!node.hasAttribute("height")) node.setAttribute("height", String(sourceHeight));
+    });
   }
 
   function forceMonochrome(svg, color) {

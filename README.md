@@ -37,6 +37,7 @@ Pushes and pull requests run `.github/workflows/static-site-ci.yml`; successful 
 - Replace files under `docs/assets/logo-system/svg/` when updating source logos; the manual references those assets directly where possible.
 - The Export Studio processes everything in the browser. It does not upload logos or require a backend.
 - Exported ZIPs use one folder per brand color, with separate `png/` and `svg/` folders when both formats are selected.
+- The standard PNG set uses 512, 1024, 2048, and 4096 px widths; custom widths remain available up to 8192 px.
 
 ## Local Check
 
