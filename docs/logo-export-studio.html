@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="SEASNAKE Logo 批量换色与 PNG / SVG 导出工具。" />
+    <title>SEASNAKE Logo Export Studio</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/logo-export-studio.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand-link" href="seasnake-ouroboros-concepts.html#top" aria-label="返回 SEASNAKE VI 品牌手册">
+        <img src="assets/logo-system/svg/seasnake-logo-snake.svg" alt="" />
+        <span>
+          <b>SEASNAKE</b>
+          <small>LOGO EXPORT STUDIO</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <span class="local-badge"><i></i>仅在本机处理</span>
+        <a class="ghost-link" href="seasnake-logo-preview.html?from=export">动态预览</a>
+        <a class="ghost-link" href="seasnake-ouroboros-concepts.html#logo-variants">品牌手册</a>
+      </div>
+    </header>
+
+    <main class="studio-shell">
+      <section class="intro">
+        <div>
+          <span class="eyebrow">BATCH COLOR · PNG · SVG</span>
+          <h1>一次设置，<br />导出整套品牌 Logo</h1>
+        </div>
+        <p>选择 Logo 和色系，调整尺寸、留白与背景。每个品牌色会自动整理进独立文件夹，最后下载一个 ZIP。</p>
+      </section>
+
+      <div class="workspace">
+        <aside class="control-panel" aria-label="Logo 导出参数">
+          <section class="control-section">
+            <div class="section-heading">
+              <span class="step">01</span>
+              <div>
+                <h2>选择 Logo</h2>
+                <p>内置主资产，也可临时加入自己的 SVG</p>
+              </div>
+            </div>
+            <div class="logo-picker" id="logo-picker" aria-live="polite"></div>
+            <label class="upload-button" for="custom-logo-input">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5h14v-5" /></svg>
+              <span>加入自己的 SVG</span>
+              <small>支持多选，本地临时使用</small>
+            </label>
+            <input id="custom-logo-input" type="file" accept=".svg,image/svg+xml" multiple hidden />
+          </section>
+
+          <section class="control-section">
+            <div class="section-heading">
+              <span class="step">02</span>
+              <div>
+                <h2>品牌色</h2>
+                <p>每个色值单独生成一套文件</p>
+              </div>
+            </div>
+            <div class="palette-list" id="palette-list"></div>
+            <button class="text-button" id="add-color" type="button">
+              <span>＋</span> 添加品牌色
+            </button>
+          </section>
+
+          <section class="control-section">
+            <div class="section-heading">
+              <span class="step">03</span>
+              <div>
+                <h2>导出参数</h2>
+                <p>参数会实时反映在右侧预览</p>
+              </div>
+            </div>
+
+            <fieldset class="field-group">
+              <legend>格式</legend>
+              <div class="segmented segmented-three" id="format-control">
+                <label><input type="radio" name="format" value="png" checked /><span>PNG</span></label>
+                <label><input type="radio" name="format" value="svg" /><span>SVG</span></label>
+                <label><input type="radio" name="format" value="both" /><span>两者</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field-group">
+              <legend>尺寸</legend>
+              <div class="segmented" id="size-mode-control">
+                <label><input type="radio" name="size-mode" value="standard" checked /><span>标准套装</span></label>
+                <label><input type="radio" name="size-mode" value="custom" /><span>自定义</span></label>
+              </div>
+              <p class="field-help" id="standard-size-help">按不同 Logo 自动使用 4 个适配尺寸</p>
+              <label class="text-field custom-size-field" id="custom-size-field" hidden>
+                <span>宽度（px，逗号分隔）</span>
+                <input id="custom-sizes" type="text" inputmode="numeric" value="128, 256, 512" spellcheck="false" />
+              </label>
+            </fieldset>
+
+            <fieldset class="field-group">
+              <legend>画布</legend>
+              <div class="segmented" id="canvas-control">
+                <label><input type="radio" name="canvas-mode" value="fit" checked /><span>跟随比例</span></label>
+                <label><input type="radio" name="canvas-mode" value="square" /><span>正方形</span></label>
+              </div>
+              <label class="range-field">
+                <span>安全留白 <output id="padding-output">8%</output></span>
+                <input id="padding-range" type="range" min="0" max="32" step="1" value="8" />
+              </label>
+            </fieldset>
+
+            <fieldset class="field-group">
+              <legend>背景</legend>
+              <div class="background-options" id="background-options">
+                <label class="background-choice transparent-choice" title="透明">
+                  <input type="radio" name="background" value="transparent" checked />
+                  <span></span><small>透明</small>
+                </label>
+                <label class="background-choice paper-choice" title="纸白">
+                  <input type="radio" name="background" value="#FBFBF5" />
+                  <span></span><small>纸白</small>
+                </label>
+                <label class="background-choice ink-choice" title="墨黑">
+                  <input type="radio" name="background" value="#070909" />
+                  <span></span><small>墨黑</small>
+                </label>
+                <label class="background-choice custom-choice" title="自定义背景">
+                  <input type="radio" name="background" value="custom" />
+                  <input id="custom-background" type="color" value="#202523" aria-label="自定义背景色" />
+                  <small>自定</small>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="check-field">
+              <input id="monochrome-toggle" type="checkbox" checked />
+              <span>
+                <b>强制单色</b>
+                <small>导入的多色 SVG 也统一替换为品牌色</small>
+              </span>
+            </label>
+          </section>
+        </aside>
+
+        <section class="preview-panel" aria-label="实时预览">
+          <div class="preview-toolbar">
+            <div>
+              <span class="eyebrow">LIVE PREVIEW</span>
+              <h2 id="preview-title">竹叶 · #D9F01A</h2>
+            </div>
+            <div class="preview-meta">
+              <span id="selection-summary">4 个 Logo</span>
+              <span id="file-summary">16 个文件</span>
+            </div>
+          </div>
+
+          <div class="color-tabs" id="color-tabs" role="tablist" aria-label="预览品牌色"></div>
+
+          <div class="preview-grid-wrap">
+            <div class="preview-grid" id="preview-grid" aria-live="polite"></div>
+            <div class="empty-state" id="empty-state" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5" /></svg>
+              <h3>还没有选择 Logo</h3>
+              <p>在左侧至少勾选一个资产。</p>
+            </div>
+          </div>
+
+          <div class="export-dock">
+            <div class="export-copy">
+              <b id="export-count">即将生成 48 个文件</b>
+              <span>ZIP 内按品牌色 / 格式分文件夹</span>
+            </div>
+            <div class="export-actions">
+              <button class="secondary-button" id="export-active" type="button">导出当前色</button>
+              <button class="primary-button" id="export-all" type="button">
+                <span>导出全部色系</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" /></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <div class="export-overlay" id="export-overlay" hidden>
+      <div class="progress-card" role="status" aria-live="polite">
+        <div class="progress-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="eyebrow">BUILDING LOGO KIT</span>
+        <h2 id="progress-title">正在生成导出文件…</h2>
+        <p id="progress-detail">准备品牌资产</p>
+        <div class="progress-track"><i id="progress-bar"></i></div>
+      </div>
+    </div>
+
+    <script src="assets/logo-export-studio.js"></script>
+  </body>
+</html>

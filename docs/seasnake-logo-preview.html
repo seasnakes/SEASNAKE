@@ -657,6 +657,20 @@
         line-height: 1.45;
       }
 
+      .config-export-link {
+        display: inline-flex;
+        margin-top: 10px;
+        color: color-mix(in srgb, var(--accent-c) 58%, #fff);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-decoration: none;
+      }
+
+      .config-export-link:hover {
+        color: #fff;
+      }
+
       @keyframes drawDown {
         from {
           stroke-dashoffset: 1;
@@ -1038,6 +1052,7 @@
         </section>
 
         <p class="config-note">参数实时生效。打开控制台也可以直接看 window.SEASNAKE_CONFIG。</p>
+        <a class="config-export-link" href="logo-export-studio.html">批量换色与导出 Logo →</a>
       </div>
     </aside>
     <main aria-hidden="true"></main>

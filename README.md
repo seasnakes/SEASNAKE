@@ -6,13 +6,18 @@ Static brand manual and logo asset system for the SEASNAKE personal IP.
 
 - Preview entry: https://seasnakes.github.io/SEASNAKE/seasnake-logo-preview.html?from=vi
 - Brand manual: https://seasnakes.github.io/SEASNAKE/seasnake-ouroboros-concepts.html
+- Logo Export Studio: https://seasnakes.github.io/SEASNAKE/logo-export-studio.html
 
 GitHub Pages publishes from `main` branch, `/docs`.
+
+Pushes and pull requests run `.github/workflows/static-site-ci.yml`; successful pushes to `main` then use GitHub Pages' existing build-and-deployment workflow.
 
 ## Main Files
 
 - `docs/seasnake-logo-preview.html` - animated VI entry page.
 - `docs/seasnake-ouroboros-concepts.html` - full brand manual.
+- `docs/logo-export-studio.html` - client-side batch recolor and PNG / SVG export tool.
+- `docs/assets/logo-export-studio.js` - SVG recoloring, PNG rasterization, and dependency-free ZIP packaging.
 - `docs/assets/logo-system/svg/` - clean master SVG marks.
 - `docs/assets/logo-system/png/` - transparent PNG exports.
 
@@ -30,6 +35,8 @@ GitHub Pages publishes from `main` branch, `/docs`.
 - `Snake + two-row wordmark` is included in the size system and uses the same transparent presentation style as the other rows.
 - Avatar and small-icon snake marks follow the selected role color.
 - Replace files under `docs/assets/logo-system/svg/` when updating source logos; the manual references those assets directly where possible.
+- The Export Studio processes everything in the browser. It does not upload logos or require a backend.
+- Exported ZIPs use one folder per brand color, with separate `png/` and `svg/` folders when both formats are selected.
 
 ## Local Check
 
@@ -41,3 +48,5 @@ file:///Users/seasnake/Documents/New%20project/docs/seasnake-ouroboros-concepts.
 ```
 
 After pushing, GitHub Pages may take a short moment to refresh. On mobile, force refresh if the old light-mode colors are still cached.
+
+The Export Studio fetches the master SVG files, so use the GitHub Pages URL or a local static server instead of opening that page through `file://`.
