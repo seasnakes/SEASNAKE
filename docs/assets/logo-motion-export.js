@@ -53,6 +53,7 @@
   elements.viButton.addEventListener("click", () => exportMotion("vi"));
   elements.format.addEventListener("change", updateFormatUi);
   elements.resolution.addEventListener("change", updateFormatUi);
+  elements.fps.addEventListener("change", updateFormatUi);
 
   window.SEASNAKE_MOTION_EXPORT = {
     exportManual: () => exportMotion("manual"),
@@ -109,7 +110,7 @@
     showProgress(
       true,
       format === "gif" ? "准备 GIF 帧编码…" : "准备动画录制…",
-      `${width} × ${height} · ${format === "gif" ? "12.5 FPS" : `${fps} FPS`} · ${format.toUpperCase()}`,
+      `${width} × ${height} · ${fps} FPS · ${format.toUpperCase()}`,
       2,
     );
 
@@ -137,13 +138,13 @@
         showProgress(true, title, detail, percent);
       };
       const blob = format === "gif"
-        ? await window.SEASNAKE_GIF.encode({ canvas, duration, renderFrame, onProgress })
+        ? await window.SEASNAKE_GIF.encode({ canvas, duration, fps, renderFrame, onProgress })
         : await recordCanvas({ canvas, fps, duration, encoding, renderFrame, onProgress });
 
       showProgress(true, format === "gif" ? "GIF 已生成" : "视频已生成", `${formatBytes(blob.size)} · 正在下载`, 100);
       const stamp = dateStamp();
       const name = preset === "manual" ? "manual-arrival" : "vi-dynamic-preview";
-      const rateLabel = format === "gif" ? "gif" : `${fps}fps`;
+      const rateLabel = format === "gif" ? `${fps}fps-gif` : `${fps}fps`;
       const filename = `seasnake-${name}-${width}x${height}-${rateLabel}-${stamp}.${encoding.extension}`;
       downloadBlob(blob, filename);
       await delay(320);
@@ -187,25 +188,18 @@
   function updateFormatUi() {
     const format = elements.format.value;
     const isGif = format === "gif";
-    elements.fps.disabled = isGif || busy;
+    elements.fps.disabled = busy;
     const [requestedWidth, requestedHeight] = elements.resolution.value.split("x").map(Number);
-    const gifOutput = outputSettings("gif", requestedWidth, requestedHeight, 12.5);
+    const selectedFps = Number(elements.fps.value);
     elements.formatNote.textContent = isGif
-      ? `GIF · 实际 ${gifOutput.width} × ${gifOutput.height} · 12.5 FPS · 本机完成`
+      ? `GIF · ${requestedWidth} × ${requestedHeight} · ${selectedFps} FPS · 每帧自适应 256 色`
       : format === "mp4"
         ? "MP4 · H.264 · 无音轨 · 本机完成"
         : "WebM · VP9 / VP8 · 无音轨 · 本机完成";
   }
 
   function outputSettings(format, width, height, fps) {
-    if (format !== "gif") return { width, height, fps };
-    const maxPixels = window.SEASNAKE_GIF?.maxPixels || 518400;
-    const scale = Math.min(1, Math.sqrt(maxPixels / (width * height)));
-    return {
-      width: Math.max(2, Math.round(width * scale / 2) * 2),
-      height: Math.max(2, Math.round(height * scale / 2) * 2),
-      fps: window.SEASNAKE_GIF?.frameRate || 12.5,
-    };
+    return { width, height, fps };
   }
 
   async function recordCanvas({ canvas, fps, duration, encoding, renderFrame, onProgress }) {
@@ -336,16 +330,6 @@
       opacity: fadeOut,
       scaleFactor: 0.68,
     });
-
-    const labelProgress = cssEase(clamp((milliseconds - 430) / 560, 0, 1));
-    context.save();
-    context.globalAlpha = labelProgress * fadeOut * 0.82;
-    context.fillStyle = "#FBFBF5";
-    context.textAlign = "center";
-    context.font = `800 ${Math.max(11, Math.round(height * 0.016))}px ui-monospace, SFMono-Regular, Menlo, monospace`;
-    context.letterSpacing = `${Math.max(2, height * 0.004)}px`;
-    context.fillText("SEASNAKE  ·  BRAND MANUAL", centerX, height * 0.91);
-    context.restore();
 
     if (milliseconds > fadeStart) {
       context.fillStyle = `rgba(5,7,7,${1 - fadeOut})`;
@@ -584,7 +568,7 @@
     elements.viButton.disabled = disabled;
     elements.format.disabled = disabled;
     elements.resolution.disabled = disabled;
-    elements.fps.disabled = disabled || elements.format.value === "gif";
+    elements.fps.disabled = disabled;
     elements.caption.disabled = disabled;
   }
 
@@ -628,10 +612,6 @@
 
   function arrivalEase(value) {
     return cubicBezier(value, 0.18, 0.82, 0.2, 1);
-  }
-
-  function cssEase(value) {
-    return cubicBezier(value, 0.25, 0.1, 0.25, 1);
   }
 
   function cubicBezier(value, x1, y1, x2, y2) {

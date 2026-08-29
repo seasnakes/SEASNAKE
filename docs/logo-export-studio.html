@@ -211,7 +211,7 @@
             <span class="eyebrow">MOTION EXPORT · LOCAL VIDEO</span>
             <h2 id="motion-title">把页面里的 Logo 动画也带走</h2>
           </div>
-          <p>两套动画直接复用现有路径与动态背景。浏览器在本机生成 MP4、WebM 或 GIF，不上传素材；GIF 会自动使用适合分享的尺寸与帧率。</p>
+          <p>两套动画直接复用现有路径与动态背景。浏览器在本机生成 MP4、WebM 或 GIF，不上传素材；三种格式都按你选择的分辨率与帧率导出。</p>
         </div>
 
         <div class="motion-settings" aria-label="动画导出参数">
@@ -220,7 +220,7 @@
             <select id="motion-format">
               <option value="mp4" selected>MP4 · H.264</option>
               <option value="webm">WebM · VP9</option>
-              <option value="gif">GIF · 分享动图</option>
+              <option value="gif">GIF · 自适应色盘</option>
             </select>
           </label>
           <label class="motion-setting motion-setting-resolution">
@@ -235,6 +235,8 @@
           <label class="motion-setting motion-setting-fps">
             <span>帧率</span>
             <select id="motion-fps">
+              <option value="15">15 FPS</option>
+              <option value="24">24 FPS</option>
               <option value="30" selected>30 FPS</option>
               <option value="60">60 FPS</option>
             </select>
@@ -254,13 +256,12 @@
             <div class="motion-card-preview" aria-hidden="true">
               <div class="motion-beam"></div>
               <svg viewBox="0 0 826 619"><use href="#motion-logo-mark"></use></svg>
-              <span>BRAND MANUAL</span>
             </div>
             <div class="motion-card-body">
               <div>
                 <span class="motion-kicker">MANUAL ARRIVAL · 2.44 SEC</span>
                 <h3>品牌手册三角 Logo 入场</h3>
-                <p>对应从动态首页进入 Manual 时的逐笔描边、光束扫过与标题显现。</p>
+                <p>用于独立品牌物料的纯三角 Logo 逐笔描边与光束扫过，不附加界面文字。</p>
               </div>
               <div class="motion-card-actions">
                 <a href="seasnake-ouroboros-concepts.html?from=preview#top">查看原动画</a>
