@@ -19,7 +19,7 @@ Pushes and pull requests run `.github/workflows/static-site-ci.yml`; successful 
 - `docs/logo-export-studio.html` - client-side batch recolor plus static and motion export studio.
 - `docs/assets/logo-export-studio.js` - SVG recoloring, high-resolution PNG rasterization, and dependency-free ZIP packaging.
 - `docs/assets/logo-motion-export.js` - browser-native MANUAL arrival and dynamic VI MP4 / WebM / GIF export.
-- `docs/assets/gif-encoder.js` - dependency-free GIF encoding with a per-frame adaptive 256-color palette.
+- `docs/assets/gif-encoder.js` - dependency-free GIF encoding with a temporally stable shared palette and brand-color anchors.
 - `docs/assets/logo-system/svg/` - clean master SVG marks.
 - `docs/assets/logo-system/png/` - transparent PNG exports.
 

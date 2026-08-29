@@ -192,7 +192,7 @@
     const [requestedWidth, requestedHeight] = elements.resolution.value.split("x").map(Number);
     const selectedFps = Number(elements.fps.value);
     elements.formatNote.textContent = isGif
-      ? `GIF · ${requestedWidth} × ${requestedHeight} · ${selectedFps} FPS · 每帧自适应 256 色`
+      ? `GIF · ${requestedWidth} × ${requestedHeight} · ${selectedFps} FPS · 品牌色锁定共享色盘`
       : format === "mp4"
         ? "MP4 · H.264 · 无音轨 · 本机完成"
         : "WebM · VP9 / VP8 · 无音轨 · 本机完成";
@@ -324,7 +324,9 @@
     drawManualBeam(context, width, height, seconds, accent);
     const fadeOut = 1 - arrivalEase(clamp((milliseconds - fadeStart) / (duration - fadeStart), 0, 1));
     drawLogo(context, width, height, {
-      progressForPath: (path) => arrivalEase(clamp((milliseconds - path.delay) / 860, 0, 1)),
+      progressForPath: (path) => path.role === "frame"
+        ? easeOutCubic(clamp((milliseconds - path.delay) / 1180, 0, 1))
+        : arrivalEase(clamp((milliseconds - path.delay) / 860, 0, 1)),
       color: mixHex("#FBFBF5", accent, 0.16),
       glowColor: accent,
       opacity: fadeOut,

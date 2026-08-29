@@ -1,17 +1,26 @@
 (() => {
   "use strict";
 
+  const PALETTE_ANCHORS = [
+    [0, 0, 0], [7, 9, 9], [251, 251, 245], [255, 255, 255],
+    [34, 198, 197], [29, 164, 171], [109, 213, 222],
+    [217, 240, 26], [188, 201, 78], [226, 240, 114],
+    [241, 38, 95], [196, 31, 77], [242, 96, 137],
+  ];
+
   window.SEASNAKE_GIF = {
     encode: encodeGif,
   };
 
   async function encodeGif({ canvas, duration, fps, renderFrame, onProgress }) {
     const context = canvas.getContext("2d", { alpha: false, willReadFrequently: true });
-    const writer = new GifWriter(canvas.width, canvas.height);
     const frameRate = Math.max(1, Math.min(60, fps));
     const frameStepSeconds = 1 / frameRate;
     const frameCount = Math.ceil(duration * frameRate);
     const durationCentiseconds = Math.round(duration * 100);
+    const palette = await buildSharedPalette({ context, canvas, duration, renderFrame });
+    const lookup = buildPaletteLookup(palette.colors);
+    const writer = new GifWriter(canvas.width, canvas.height, palette.bytes);
 
     for (let index = 0; index < frameCount; index += 1) {
       const seconds = index * frameStepSeconds;
@@ -20,7 +29,7 @@
       const delayCentiseconds = Math.max(1, endCentiseconds - startCentiseconds);
       renderFrame(seconds);
       const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-      writer.addFrame(quantizeFrame(pixels), delayCentiseconds);
+      writer.addFrame(indexFrame(pixels, lookup), delayCentiseconds);
       onProgress?.((index + 1) / frameCount, index + 1, frameCount);
       await nextPaint();
     }
@@ -29,7 +38,7 @@
   }
 
   class GifWriter {
-    constructor(width, height) {
+    constructor(width, height, palette) {
       this.width = width;
       this.height = height;
       this.parts = [];
@@ -43,13 +52,13 @@
         0,
         0,
       ));
-      this.parts.push(buildPalette());
+      this.parts.push(palette);
       this.parts.push(bytes(0x21, 0xff, 0x0b));
       this.parts.push(ascii("NETSCAPE2.0"));
       this.parts.push(bytes(0x03, 0x01, 0x00, 0x00, 0x00));
     }
 
-    addFrame(frame, delayCentiseconds) {
+    addFrame(indices, delayCentiseconds) {
       this.parts.push(bytes(
         0x21, 0xf9, 0x04,
         0x04,
@@ -65,11 +74,10 @@
         this.width >> 8,
         this.height & 0xff,
         this.height >> 8,
-        0x87,
+        0,
       ));
-      this.parts.push(frame.palette);
       this.parts.push(bytes(8));
-      const compressed = lzwEncode(frame.indices);
+      const compressed = lzwEncode(indices);
       for (let offset = 0; offset < compressed.length; offset += 255) {
         const block = compressed.subarray(offset, Math.min(offset + 255, compressed.length));
         this.parts.push(bytes(block.length), block);
@@ -83,24 +91,31 @@
     }
   }
 
-  function quantizeFrame(rgba) {
-    const pixelCount = rgba.length / 4;
-    const bins = new Uint16Array(pixelCount);
+  async function buildSharedPalette({ context, canvas, duration, renderFrame }) {
     const counts = new Uint32Array(32768);
     const redSums = new Uint32Array(32768);
     const greenSums = new Uint32Array(32768);
     const blueSums = new Uint32Array(32768);
+    const sampleCount = duration > 4 ? 12 : 6;
 
-    for (let pixel = 0, source = 0; source < rgba.length; pixel += 1, source += 4) {
-      const red = rgba[source];
-      const green = rgba[source + 1];
-      const blue = rgba[source + 2];
-      const bin = (red >> 3) << 10 | (green >> 3) << 5 | (blue >> 3);
-      bins[pixel] = bin;
-      counts[bin] += 1;
-      redSums[bin] += red;
-      greenSums[bin] += green;
-      blueSums[bin] += blue;
+    for (let sample = 0; sample < sampleCount; sample += 1) {
+      const seconds = sampleCount === 1 ? 0 : duration * sample / (sampleCount - 1);
+      renderFrame(seconds);
+      const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      const pixelCount = rgba.length / 4;
+      const stride = Math.max(1, Math.floor(pixelCount / 90000));
+      for (let pixel = sample % stride; pixel < pixelCount; pixel += stride) {
+        const source = pixel * 4;
+        const red = rgba[source];
+        const green = rgba[source + 1];
+        const blue = rgba[source + 2];
+        const bin = (red >> 3) << 10 | (green >> 3) << 5 | (blue >> 3);
+        counts[bin] += 1;
+        redSums[bin] += red;
+        greenSums[bin] += green;
+        blueSums[bin] += blue;
+      }
+      await nextPaint();
     }
 
     const colors = [];
@@ -116,8 +131,9 @@
       });
     }
 
+    const targetBoxCount = 256 - PALETTE_ANCHORS.length;
     const boxes = [makeColorBox(colors)];
-    while (boxes.length < 256) {
+    while (boxes.length < targetBoxCount) {
       let splitIndex = -1;
       let splitScore = -1;
       for (let index = 0; index < boxes.length; index += 1) {
@@ -132,9 +148,9 @@
       boxes.splice(splitIndex, 1, left, right);
     }
 
-    const palette = new Uint8Array(256 * 3);
-    const lookup = new Uint8Array(32768);
-    boxes.forEach((box, paletteIndex) => {
+    const paletteBytes = new Uint8Array(256 * 3);
+    const paletteColors = [];
+    boxes.forEach((box) => {
       let population = 0;
       let red = 0;
       let green = 0;
@@ -144,16 +160,54 @@
         red += color.r * color.count;
         green += color.g * color.count;
         blue += color.b * color.count;
-        lookup[color.bin] = paletteIndex;
       });
-      palette[paletteIndex * 3] = Math.round(red / population);
-      palette[paletteIndex * 3 + 1] = Math.round(green / population);
-      palette[paletteIndex * 3 + 2] = Math.round(blue / population);
+      paletteColors.push([
+        Math.round(red / population),
+        Math.round(green / population),
+        Math.round(blue / population),
+      ]);
     });
+    paletteColors.push(...PALETTE_ANCHORS);
+    while (paletteColors.length < 256) paletteColors.push(PALETTE_ANCHORS[0]);
+    paletteColors.slice(0, 256).forEach((color, index) => {
+      paletteBytes[index * 3] = color[0];
+      paletteBytes[index * 3 + 1] = color[1];
+      paletteBytes[index * 3 + 2] = color[2];
+    });
+    return { bytes: paletteBytes, colors: paletteColors.slice(0, 256) };
+  }
 
-    const indices = new Uint8Array(pixelCount);
-    for (let pixel = 0; pixel < pixelCount; pixel += 1) indices[pixel] = lookup[bins[pixel]];
-    return { indices, palette };
+  function buildPaletteLookup(palette) {
+    const lookup = new Uint8Array(32768);
+    for (let bin = 0; bin < lookup.length; bin += 1) {
+      const red = ((bin >> 10) & 31) * 255 / 31;
+      const green = ((bin >> 5) & 31) * 255 / 31;
+      const blue = (bin & 31) * 255 / 31;
+      let bestIndex = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+      for (let index = 0; index < palette.length; index += 1) {
+        const color = palette[index];
+        const redDelta = red - color[0];
+        const greenDelta = green - color[1];
+        const blueDelta = blue - color[2];
+        const distance = redDelta * redDelta * 0.3 + greenDelta * greenDelta * 0.59 + blueDelta * blueDelta * 0.11;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      }
+      lookup[bin] = bestIndex;
+    }
+    return lookup;
+  }
+
+  function indexFrame(rgba, lookup) {
+    const indices = new Uint8Array(rgba.length / 4);
+    for (let pixel = 0, source = 0; source < rgba.length; pixel += 1, source += 4) {
+      const bin = (rgba[source] >> 3) << 10 | (rgba[source + 1] >> 3) << 5 | (rgba[source + 2] >> 3);
+      indices[pixel] = lookup[bin];
+    }
+    return indices;
   }
 
   function makeColorBox(colors) {
@@ -196,16 +250,6 @@
       }
     }
     return [makeColorBox(box.colors.slice(0, splitAt)), makeColorBox(box.colors.slice(splitAt))];
-  }
-
-  function buildPalette() {
-    const palette = new Uint8Array(256 * 3);
-    for (let index = 0; index < 256; index += 1) {
-      palette[index * 3] = Math.round(((index >> 5) & 7) * 255 / 7);
-      palette[index * 3 + 1] = Math.round(((index >> 2) & 7) * 255 / 7);
-      palette[index * 3 + 2] = (index & 3) * 85;
-    }
-    return palette;
   }
 
   function lzwEncode(indices) {
