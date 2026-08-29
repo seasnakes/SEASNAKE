@@ -211,11 +211,19 @@
             <span class="eyebrow">MOTION EXPORT · LOCAL VIDEO</span>
             <h2 id="motion-title">把页面里的 Logo 动画也带走</h2>
           </div>
-          <p>两套动画直接复用现有路径与动态背景。浏览器在本机实时录制，不上传素材；Chrome 导出 WebM，兼容浏览器会自动选择可用的视频格式。</p>
+          <p>两套动画直接复用现有路径与动态背景。浏览器在本机生成 MP4、WebM 或 GIF，不上传素材；GIF 会自动使用适合分享的尺寸与帧率。</p>
         </div>
 
         <div class="motion-settings" aria-label="动画导出参数">
-          <label>
+          <label class="motion-setting motion-setting-format">
+            <span>格式</span>
+            <select id="motion-format">
+              <option value="mp4" selected>MP4 · H.264</option>
+              <option value="webm">WebM · VP9</option>
+              <option value="gif">GIF · 分享动图</option>
+            </select>
+          </label>
+          <label class="motion-setting motion-setting-resolution">
             <span>分辨率</span>
             <select id="motion-resolution">
               <option value="1280x720">HD · 1280 × 720</option>
@@ -224,14 +232,21 @@
               <option value="1080x1080">方形 · 1080 × 1080</option>
             </select>
           </label>
-          <label>
+          <label class="motion-setting motion-setting-fps">
             <span>帧率</span>
             <select id="motion-fps">
               <option value="30" selected>30 FPS</option>
               <option value="60">60 FPS</option>
             </select>
           </label>
-          <span class="motion-local-note"><i></i>无音轨 · 实时录制 · 本机完成</span>
+          <label class="motion-caption-toggle">
+            <input id="motion-caption" type="checkbox" />
+            <span>
+              <b>VI 左下角文字</b>
+              <small>显示色系名称与顺序</small>
+            </span>
+          </label>
+          <span class="motion-local-note"><i></i><span id="motion-format-note">MP4 · H.264 · 无音轨 · 本机完成</span></span>
         </div>
 
         <div class="motion-grid">
@@ -249,7 +264,7 @@
               </div>
               <div class="motion-card-actions">
                 <a href="seasnake-ouroboros-concepts.html?from=preview#top">查看原动画</a>
-                <button class="motion-export-button" id="export-manual-motion" type="button">导出视频</button>
+                <button class="motion-export-button" id="export-manual-motion" type="button">导出动画</button>
               </div>
             </div>
           </article>
@@ -268,7 +283,7 @@
               </div>
               <div class="motion-card-actions">
                 <a href="seasnake-logo-preview.html?from=vi">查看原动画</a>
-                <button class="motion-export-button" id="export-vi-motion" type="button">导出视频</button>
+                <button class="motion-export-button" id="export-vi-motion" type="button">导出动画</button>
               </div>
             </div>
           </article>
@@ -288,6 +303,7 @@
     </div>
 
     <script src="assets/logo-export-studio.js"></script>
+    <script src="assets/gif-encoder.js"></script>
     <script src="assets/logo-motion-export.js"></script>
   </body>
 </html>

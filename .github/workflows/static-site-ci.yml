@@ -26,6 +26,7 @@ jobs:
       - name: Check export script syntax
         run: |
           node --check docs/assets/logo-export-studio.js
+          node --check docs/assets/gif-encoder.js
           node --check docs/assets/logo-motion-export.js
 
       - name: Validate static pages and assets

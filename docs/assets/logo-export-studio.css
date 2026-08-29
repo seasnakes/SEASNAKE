@@ -1140,6 +1140,7 @@ a:focus-visible {
 
 .motion-settings {
   display: flex;
+  flex-wrap: wrap;
   align-items: end;
   gap: 12px;
   margin-bottom: 18px;
@@ -1148,17 +1149,24 @@ a:focus-visible {
   background: rgba(12, 16, 15, 0.78);
 }
 
-.motion-settings label {
+.motion-setting {
   display: grid;
   gap: 7px;
+}
+
+.motion-setting-resolution {
   min-width: 220px;
 }
 
-.motion-settings label:nth-child(2) {
+.motion-setting-format {
+  min-width: 170px;
+}
+
+.motion-setting-fps {
   min-width: 130px;
 }
 
-.motion-settings label > span {
+.motion-setting > span {
   color: var(--muted);
   font-size: 9px;
   font-weight: 800;
@@ -1174,6 +1182,44 @@ a:focus-visible {
   color: var(--text);
   background: #101413;
   cursor: pointer;
+}
+
+.motion-settings select:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.motion-caption-toggle {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  background: #101413;
+  cursor: pointer;
+}
+
+.motion-caption-toggle input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.motion-caption-toggle > span {
+  display: grid;
+  gap: 2px;
+}
+
+.motion-caption-toggle b {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.motion-caption-toggle small {
+  color: var(--muted);
+  font-size: 8px;
 }
 
 .motion-local-note {
@@ -1548,9 +1594,15 @@ a:focus-visible {
     grid-template-columns: 1fr 0.66fr;
   }
 
-  .motion-settings label,
-  .motion-settings label:nth-child(2) {
+  .motion-setting,
+  .motion-setting-resolution,
+  .motion-setting-format,
+  .motion-setting-fps {
     min-width: 0;
+  }
+
+  .motion-caption-toggle {
+    grid-column: 1 / -1;
   }
 
   .motion-local-note {

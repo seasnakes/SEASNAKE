@@ -29,8 +29,11 @@
   ];
 
   const elements = {
+    format: document.getElementById("motion-format"),
     resolution: document.getElementById("motion-resolution"),
     fps: document.getElementById("motion-fps"),
+    caption: document.getElementById("motion-caption"),
+    formatNote: document.getElementById("motion-format-note"),
     manualButton: document.getElementById("export-manual-motion"),
     viButton: document.getElementById("export-vi-motion"),
     overlay: document.getElementById("export-overlay"),
@@ -45,8 +48,11 @@
   const sampledPaths = sampleLogoPaths();
   let busy = false;
 
+  initializeFormats();
   elements.manualButton.addEventListener("click", () => exportMotion("manual"));
   elements.viButton.addEventListener("click", () => exportMotion("vi"));
+  elements.format.addEventListener("change", updateFormatUi);
+  elements.resolution.addEventListener("change", updateFormatUi);
 
   window.SEASNAKE_MOTION_EXPORT = {
     exportManual: () => exportMotion("manual"),
@@ -54,7 +60,11 @@
     getCapabilities: () => ({
       captureStream: typeof HTMLCanvasElement.prototype.captureStream === "function",
       mediaRecorder: typeof window.MediaRecorder === "function",
-      encoding: preferredEncoding(),
+      formats: {
+        mp4: encodingForFormat("mp4"),
+        webm: encodingForFormat("webm"),
+        gif: encodingForFormat("gif"),
+      },
     }),
   };
 
@@ -70,19 +80,23 @@
       return null;
     }
 
-    if (typeof HTMLCanvasElement.prototype.captureStream !== "function" || typeof window.MediaRecorder !== "function") {
+    const format = elements.format.value;
+    const needsMediaRecorder = format !== "gif";
+    if (needsMediaRecorder && (typeof HTMLCanvasElement.prototype.captureStream !== "function" || typeof window.MediaRecorder !== "function")) {
       showToast("当前浏览器不支持本地视频录制，请使用最新版 Chrome、Edge 或 Safari。", "error", 7000);
       return null;
     }
 
-    const encoding = preferredEncoding();
+    const encoding = encodingForFormat(format);
     if (!encoding) {
-      showToast("当前浏览器没有可用的视频编码器，请使用最新版 Chrome。", "error", 7000);
+      showToast(`${format.toUpperCase()} 编码在当前浏览器不可用，请换一种格式或使用最新版 Chrome。`, "error", 7000);
       return null;
     }
 
-    const [width, height] = elements.resolution.value.split("x").map(Number);
-    const fps = Number(elements.fps.value);
+    const [requestedWidth, requestedHeight] = elements.resolution.value.split("x").map(Number);
+    const requestedFps = Number(elements.fps.value);
+    const output = outputSettings(format, requestedWidth, requestedHeight, requestedFps);
+    const { width, height, fps } = output;
     const duration = preset === "manual" ? 2.44 : 8;
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -92,7 +106,12 @@
 
     busy = true;
     setButtonsDisabled(true);
-    showProgress(true, "准备动画录制…", `${width} × ${height} · ${fps} FPS`, 2);
+    showProgress(
+      true,
+      format === "gif" ? "准备 GIF 帧编码…" : "准备动画录制…",
+      `${width} × ${height} · ${format === "gif" ? "12.5 FPS" : `${fps} FPS`} · ${format.toUpperCase()}`,
+      2,
+    );
 
     try {
       if (preset === "vi") {
@@ -100,37 +119,36 @@
         previewFrame = await createPreviewFrame(width, height);
       }
 
+      const showCaption = preset === "vi" && elements.caption.checked;
       const renderFrame = preset === "manual"
         ? (seconds) => renderManualFrame(context, width, height, seconds)
-        : (seconds) => renderViFrame(context, width, height, seconds, previewFrame.api);
+        : (seconds) => renderViFrame(context, width, height, seconds, previewFrame.api, { showCaption });
 
       renderFrame(0);
-      const blob = await recordCanvas({
-        canvas,
-        fps,
-        duration,
-        encoding,
-        renderFrame,
-        onProgress: (progress) => {
-          const percent = 6 + progress * 90;
-          const elapsed = (progress * duration).toFixed(1);
-          showProgress(
-            true,
-            preset === "manual" ? "正在录制 MANUAL 入场…" : "正在录制动态 VI 预览…",
-            `${elapsed} / ${duration.toFixed(1)} 秒 · 请保持本页可见`,
-            percent,
-          );
-        },
-      });
+      const onProgress = (progress, frame, frameCount) => {
+        const percent = 6 + progress * 90;
+        const elapsed = (progress * duration).toFixed(1);
+        const title = format === "gif"
+          ? "正在编码 GIF 动图…"
+          : preset === "manual" ? "正在录制 MANUAL 入场…" : "正在录制动态 VI 预览…";
+        const detail = format === "gif"
+          ? `${frame || 0} / ${frameCount || "–"} 帧 · 请保持本页可见`
+          : `${elapsed} / ${duration.toFixed(1)} 秒 · 请保持本页可见`;
+        showProgress(true, title, detail, percent);
+      };
+      const blob = format === "gif"
+        ? await window.SEASNAKE_GIF.encode({ canvas, duration, renderFrame, onProgress })
+        : await recordCanvas({ canvas, fps, duration, encoding, renderFrame, onProgress });
 
-      showProgress(true, "视频已生成", `${formatBytes(blob.size)} · 正在下载`, 100);
+      showProgress(true, format === "gif" ? "GIF 已生成" : "视频已生成", `${formatBytes(blob.size)} · 正在下载`, 100);
       const stamp = dateStamp();
       const name = preset === "manual" ? "manual-arrival" : "vi-dynamic-preview";
-      const filename = `seasnake-${name}-${width}x${height}-${fps}fps-${stamp}.${encoding.extension}`;
+      const rateLabel = format === "gif" ? "gif" : `${fps}fps`;
+      const filename = `seasnake-${name}-${width}x${height}-${rateLabel}-${stamp}.${encoding.extension}`;
       downloadBlob(blob, filename);
       await delay(320);
       showToast(`已导出 ${filename}`);
-      return { blob, filename, width, height, fps, duration, mimeType: encoding.mimeType };
+      return { blob, filename, width, height, fps, duration, format, mimeType: encoding.mimeType };
     } catch (error) {
       console.error(error);
       showToast(error?.message || "动画导出失败，请重试。", "error", 8000);
@@ -143,16 +161,51 @@
     }
   }
 
-  function preferredEncoding() {
+  function encodingForFormat(format) {
+    if (format === "gif") {
+      return window.SEASNAKE_GIF ? { mimeType: "image/gif", extension: "gif", label: "GIF" } : null;
+    }
     if (typeof window.MediaRecorder !== "function") return null;
-    const candidates = [
-      { mimeType: "video/webm;codecs=vp9", extension: "webm" },
-      { mimeType: "video/webm;codecs=vp8", extension: "webm" },
-      { mimeType: "video/webm", extension: "webm" },
-      { mimeType: "video/mp4;codecs=avc1.42E01E", extension: "mp4" },
-      { mimeType: "video/mp4", extension: "mp4" },
-    ];
-    return candidates.find(({ mimeType }) => MediaRecorder.isTypeSupported(mimeType)) || null;
+    const candidates = format === "mp4"
+      ? ["video/mp4;codecs=avc1.42E01E", "video/mp4;codecs=avc1.4D401E", "video/mp4"]
+      : ["video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
+    const mimeType = candidates.find((candidate) => MediaRecorder.isTypeSupported(candidate));
+    return mimeType ? { mimeType, extension: format, label: format.toUpperCase() } : null;
+  }
+
+  function initializeFormats() {
+    for (const option of elements.format.options) {
+      option.disabled = !encodingForFormat(option.value);
+    }
+    if (elements.format.selectedOptions[0]?.disabled) {
+      const fallback = [...elements.format.options].find((option) => !option.disabled);
+      if (fallback) elements.format.value = fallback.value;
+    }
+    updateFormatUi();
+  }
+
+  function updateFormatUi() {
+    const format = elements.format.value;
+    const isGif = format === "gif";
+    elements.fps.disabled = isGif || busy;
+    const [requestedWidth, requestedHeight] = elements.resolution.value.split("x").map(Number);
+    const gifOutput = outputSettings("gif", requestedWidth, requestedHeight, 12.5);
+    elements.formatNote.textContent = isGif
+      ? `GIF · 实际 ${gifOutput.width} × ${gifOutput.height} · 12.5 FPS · 本机完成`
+      : format === "mp4"
+        ? "MP4 · H.264 · 无音轨 · 本机完成"
+        : "WebM · VP9 / VP8 · 无音轨 · 本机完成";
+  }
+
+  function outputSettings(format, width, height, fps) {
+    if (format !== "gif") return { width, height, fps };
+    const maxPixels = window.SEASNAKE_GIF?.maxPixels || 518400;
+    const scale = Math.min(1, Math.sqrt(maxPixels / (width * height)));
+    return {
+      width: Math.max(2, Math.round(width * scale / 2) * 2),
+      height: Math.max(2, Math.round(height * scale / 2) * 2),
+      fps: window.SEASNAKE_GIF?.frameRate || 12.5,
+    };
   }
 
   async function recordCanvas({ canvas, fps, duration, encoding, renderFrame, onProgress }) {
@@ -300,7 +353,7 @@
     }
   }
 
-  function renderViFrame(context, width, height, seconds, previewApi) {
+  function renderViFrame(context, width, height, seconds, previewApi, { showCaption = false } = {}) {
     const duration = 8;
     const themeProgress = smoothThemeProgress(seconds / duration);
     const backgroundPhase = Math.min(themeProgress, 0.9995);
@@ -320,8 +373,6 @@
     const palette = paletteAt(themeProgress);
     const accent = palette[0];
     const logoColor = mixHex("#FFFFFF", palette[2], 0.48);
-    const entrance = easeOutCubic(clamp(seconds / 1.55, 0, 1));
-    drawRays(context, width, height, seconds, accent, entrance);
     drawLogo(context, width, height, {
       progressForPath: (path) => easeOutCubic(clamp((seconds * 1000 - path.delay * 0.34) / 980, 0, 1)),
       color: logoColor,
@@ -330,7 +381,7 @@
       scaleFactor: 0.76 + Math.sin(seconds * 0.72) * 0.008,
     });
     drawEdgeRunner(context, width, height, seconds, mixHex("#FFFFFF", accent, 0.58));
-    drawViCaption(context, width, height, themeProgress, palette);
+    if (showCaption) drawViCaption(context, width, height, themeProgress, palette);
 
     const startFade = 1 - easeOutCubic(clamp(seconds / 0.28, 0, 1));
     const endFade = easeInOutCubic(clamp((seconds - 7.62) / 0.38, 0, 1));
@@ -375,27 +426,6 @@
     context.shadowColor = color;
     context.shadowBlur = 28 / Math.max(scale, 0.5);
     drawPolylineWindow(context, frame.points, start, 0.095);
-    context.restore();
-  }
-
-  function drawRays(context, width, height, seconds, accent, entrance) {
-    const centerX = width * 0.5;
-    const centerY = height * 0.43;
-    const radius = Math.min(width, height) * 0.55;
-    context.save();
-    context.globalCompositeOperation = "lighter";
-    context.lineCap = "round";
-    for (let index = 0; index < 9; index += 1) {
-      const angle = -Math.PI * 0.88 + index * (Math.PI * 1.76 / 8) + Math.sin(seconds * 0.6 + index) * 0.025;
-      const inner = radius * (0.38 + (index % 2) * 0.055);
-      const length = radius * (0.30 + (index % 3) * 0.055) * entrance;
-      context.beginPath();
-      context.moveTo(centerX + Math.cos(angle) * inner, centerY + Math.sin(angle) * inner);
-      context.lineTo(centerX + Math.cos(angle) * (inner + length), centerY + Math.sin(angle) * (inner + length));
-      context.strokeStyle = rgba(accent, 0.09 + (index % 3) * 0.025);
-      context.lineWidth = Math.max(1, height * 0.0017);
-      context.stroke();
-    }
     context.restore();
   }
 
@@ -552,8 +582,10 @@
   function setButtonsDisabled(disabled) {
     elements.manualButton.disabled = disabled;
     elements.viButton.disabled = disabled;
+    elements.format.disabled = disabled;
     elements.resolution.disabled = disabled;
-    elements.fps.disabled = disabled;
+    elements.fps.disabled = disabled || elements.format.value === "gif";
+    elements.caption.disabled = disabled;
   }
 
   function downloadBlob(blob, filename) {

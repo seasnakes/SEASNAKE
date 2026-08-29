@@ -14,6 +14,7 @@ const requiredFiles = [
   "docs/logo-export-studio.html",
   "docs/assets/logo-export-studio.css",
   "docs/assets/logo-export-studio.js",
+  "docs/assets/gif-encoder.js",
   "docs/assets/logo-motion-export.js",
   "docs/assets/logo-system/svg/seasnake-logo-snake.svg",
   "docs/assets/logo-system/svg/seasnake-logo-triangle.svg",
