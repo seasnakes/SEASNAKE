@@ -651,9 +651,9 @@
       h1 {
         max-width: 9em;
         font-size: var(--type-h1-size);
-        font-weight: 800;
+        font-weight: 900;
         line-height: var(--type-h1-leading);
-        letter-spacing: -.035em;
+        letter-spacing: -.05em;
       }
 
       .lead {
@@ -703,9 +703,9 @@
 
       .section-head h2 {
         font-size: var(--type-h2-size);
-        font-weight: 760;
+        font-weight: 800;
         line-height: var(--type-h2-leading);
-        letter-spacing: -.025em;
+        letter-spacing: -.035em;
       }
 
       .section-head p {
@@ -2824,15 +2824,60 @@
 
       <section class="section type-system" id="typography-system">
         <div class="section-head">
-          <h2>字体系统</h2>
-          <p>字体承担品牌的理性秩序，也保留蛇的感知与叙事。无衬线负责标题、正文和界面；宋体只进入引言与引用；等宽字体用于参数、标签和技术信息。</p>
+          <h2 class="ss-brand-chapter">字体系统</h2>
+          <p>标题不再只靠“粗”和“大”建立层级，而是继承 Logo 的斜切、开放笔画、单线骨架与错位动势。正文保持中性，让品牌张力集中在最需要被记住的 20%。</p>
+        </div>
+
+        <div class="type-dna">
+          <div class="type-dna-visual" aria-label="SEASNAKE Logo 几何结构">
+            <span class="type-dna-angle">55° diagonal / open stroke / monoline</span>
+            <svg class="type-dna-triangle logo-triangle" viewBox="0 0 826.87 618.54" aria-hidden="true"><use href="#seasnake-word-triangle" /></svg>
+            <svg class="type-dna-wordmark wordmark-horizontal-ai" viewBox="120 220 735 205" aria-hidden="true"><use href="#seasnake-horizontal-wordmark-ai" /></svg>
+          </div>
+          <div class="type-dna-copy">
+            <small>brand dna / controlled chaos</small>
+            <h3>危险，<br />被几何精确约束</h3>
+            <p>三角框架负责控制，尖角字标负责攻击性，蛇形曲线负责不确定性。字体系统不复制 Logo 字形，而是继承它的结构关系。</p>
+            <div class="type-dna-rules">
+              <div class="type-dna-rule"><b>55° / Cut</b><span>标题导轨与切线沿主标斜边建立方向。</span></div>
+              <div class="type-dna-rule"><b>Open / Air</b><span>描边字与断裂留白继承开放笔画。</span></div>
+              <div class="type-dna-rule"><b>Mono / Control</b><span>细线框、等宽编号维持精密秩序。</span></div>
+              <div class="type-dna-rule"><b>Coil / Motion</b><span>错位、跨栏与相位残影制造爬行动势。</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="type-directions" aria-label="SEASNAKE 字体方向比较">
+          <article class="type-direction-card">
+            <small>A / precision</small>
+            <div class="type-direction-sample precision"><span>SEASNAKE</span><span>signal / system / 001</span></div>
+            <h3>PRECISION · 精密</h3>
+            <p>大尺度中性黑体、极端留白与技术编号。秩序最强，但单独使用仍容易落入通用科技品牌。</p>
+          </article>
+          <article class="type-direction-card selected">
+            <small>B / venom</small>
+            <div class="type-direction-sample venom"><span>VENOM</span><span class="outline">CONTROL</span></div>
+            <h3>VENOM · 毒性</h3>
+            <p>斜切、紧字距、实心与描边双相。最接近 Logo 的尖锐感，承担 Display 与 H1。</p>
+          </article>
+          <article class="type-direction-card selected">
+            <small>C / serpent</small>
+            <div class="type-direction-sample serpent"><span>SEA</span><span>SNAKE</span><span>COILED / OFFSET / ALIVE</span></div>
+            <h3>SERPENT · 爬行</h3>
+            <p>错位、断裂、跨栏与非对称负空间。负责构图动势，避免所有标题都像标准组件。</p>
+          </article>
+        </div>
+
+        <div class="type-direction-decision">
+          <strong>SELECTED / B + C</strong>
+          <p>最终采用 VENOM 的切角与双相文字作为字面风格，再用 SERPENT 的错位构图制造爬行感；PRECISION 保留为正文、界面和数据层的稳定底盘。</p>
         </div>
 
         <div class="type-system-overview">
           <article class="type-foundation-card sans" data-index="01">
             <small>primary / sans</small>
             <h3>Inter + 系统黑体</h3>
-            <p>品牌的主字体角色。英文优先 Inter，中文依次使用苹方与微软雅黑；用于 Display、H1–H5、正文、按钮和界面。</p>
+            <p>品牌的中性承载层。英文优先 Inter，中文依次使用苹方与微软雅黑；正文、按钮和界面保持清晰，Display 与 H1 再叠加品牌构图。</p>
             <div class="type-alphabet">SEASNAKE 012345<br />潜行 · 感知 · 更新</div>
           </article>
           <article class="type-foundation-card serif" data-index="02">
@@ -2850,10 +2895,12 @@
         </div>
 
         <article class="type-specimen-hero" aria-label="SEASNAKE 品牌标题示例">
+          <svg class="type-specimen-wordmark wordmark-horizontal-ai" viewBox="120 220 735 205" aria-hidden="true"><use href="#seasnake-horizontal-wordmark-ai" /></svg>
+          <svg class="type-specimen-triangle logo-triangle" viewBox="0 0 826.87 618.54" aria-hidden="true"><use href="#seasnake-word-triangle" /></svg>
           <span class="type-specimen-kicker">SEASNAKE / PERSONAL IP / 001</span>
-          <div class="type-specimen-display ss-type-display">潜行于<br />变化之中</div>
+          <div class="type-specimen-display ss-type-display"><span class="type-specimen-line">潜行于</span><span class="type-specimen-line outline">变化之中</span></div>
           <p class="type-specimen-subtitle ss-type-subtitle">Observe the current. Keep the form alive.<br />观察流动，让形态保持生命。</p>
-          <div class="type-specimen-meta"><span>Display 112 / 52</span><span>Weight 800</span><span>Leading 0.90</span><span>Tracking -0.045em</span></div>
+          <div class="type-specimen-meta"><span>Display 112 / 52</span><span>Weight 900</span><span>Leading 0.84</span><span>Tracking -0.065em</span><span>Skew -6°</span></div>
         </article>
 
         <div class="type-scale" aria-label="SEASNAKE 字号层级表">
@@ -2866,25 +2913,25 @@
           <div class="type-scale-row" data-level="display">
             <div class="type-token"><b>品牌标题 / Display</b><code>--type-display-size</code></div>
             <div class="type-scale-sample ss-type-display">潜行于变化之中</div>
-            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>112 / 52 px</dd></div><div><dt>Weight</dt><dd>800</dd></div><div><dt>Leading</dt><dd>0.90</dd></div><div><dt>Tracking</dt><dd>-0.045em</dd></div></dl>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>112 / 52 px</dd></div><div><dt>Weight</dt><dd>900</dd></div><div><dt>Leading</dt><dd>0.84</dd></div><div><dt>Tracking</dt><dd>-0.065em</dd></div></dl>
           </div>
 
           <div class="type-scale-row" data-level="h1">
             <div class="type-token"><b>H1 / 页面主标题</b><code>--type-h1-size</code></div>
             <div class="type-scale-sample ss-type-h1">三蛇视觉系统</div>
-            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>80 / 44 px</dd></div><div><dt>Weight</dt><dd>800</dd></div><div><dt>Leading</dt><dd>0.96</dd></div><div><dt>Tracking</dt><dd>-0.035em</dd></div></dl>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>80 / 44 px</dd></div><div><dt>Weight</dt><dd>900</dd></div><div><dt>Leading</dt><dd>0.92</dd></div><div><dt>Tracking</dt><dd>-0.05em</dd></div></dl>
           </div>
 
           <div class="type-scale-row" data-level="h2">
             <div class="type-token"><b>H2 / 章节标题</b><code>--type-h2-size</code></div>
-            <div class="type-scale-sample ss-type-h2">感知与形态</div>
-            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>56 / 34 px</dd></div><div><dt>Weight</dt><dd>760</dd></div><div><dt>Leading</dt><dd>1.05</dd></div><div><dt>Tracking</dt><dd>-0.025em</dd></div></dl>
+            <div class="type-scale-sample ss-type-h2 ss-brand-chapter">感知与形态</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>56 / 34 px</dd></div><div><dt>Weight</dt><dd>800</dd></div><div><dt>Leading</dt><dd>1.00</dd></div><div><dt>Tracking</dt><dd>-0.035em</dd></div></dl>
           </div>
 
           <div class="type-scale-row" data-level="h3">
             <div class="type-token"><b>H3 / 模块标题</b><code>--type-h3-size</code></div>
-            <div class="type-scale-sample ss-type-h3">青蓝树蟒</div>
-            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>40 / 28 px</dd></div><div><dt>Weight</dt><dd>720</dd></div><div><dt>Leading</dt><dd>1.15</dd></div><div><dt>Tracking</dt><dd>-0.018em</dd></div></dl>
+            <div class="type-scale-sample ss-type-h3 ss-brand-module">青蓝树蟒</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>40 / 28 px</dd></div><div><dt>Weight</dt><dd>750</dd></div><div><dt>Leading</dt><dd>1.15</dd></div><div><dt>Tracking</dt><dd>-0.018em</dd></div></dl>
           </div>
 
           <div class="type-scale-row">
@@ -2954,8 +3001,8 @@
         </div>
 
         <div class="type-rules">
-          <article class="type-rule"><b>一屏一个主层级</b><p>Display 与 H1 不在同一视觉区域竞争；章节内从 H2 顺序向下，不为“更醒目”跳级。</p></article>
-          <article class="type-rule"><b>中文不强行拉字距</b><p>H1–H4 使用轻微负字距或默认字距。只有英文大写标签使用 0.14–0.18em 的正字距。</p></article>
+          <article class="type-rule"><b>20% 张力 / 80% 秩序</b><p>切角、描边和错位只用于 Display、H1、章节开场和品牌数字；正文与操作界面保持中性。</p></article>
+          <article class="type-rule"><b>一屏一个攻击点</b><p>实心/描边双相、斜切导轨、错位跨栏三者最多选择两种，避免每一层都同时发力。</p></article>
           <article class="type-rule"><b>正文控制行宽</b><p>中文正文建议每行约 28–38 个汉字，行高 1.70–1.80；避免大段居中排版。</p></article>
           <article class="type-rule"><b>Logo 不用字体重打</b><p>SEASNAKE 专用字标始终调用 SVG 资产；这套字体系统只管理信息文字，不替代品牌 Logo。</p></article>
         </div>

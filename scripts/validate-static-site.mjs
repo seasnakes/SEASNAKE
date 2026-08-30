@@ -77,6 +77,9 @@ const brandManual = await readFile(path.join(docsRoot, "seasnake-ouroboros-conce
 if (!brandManual.includes('id="typography-system"')) {
   failures.push("brand manual is missing the typography system chapter");
 }
+for (const marker of ["type-dna", "SELECTED / B + C", "ss-brand-chapter", "ss-brand-module"]) {
+  if (!brandManual.includes(marker)) failures.push(`brand manual is missing typography marker: ${marker}`);
+}
 
 const typeSystem = await readFile(path.join(docsRoot, "assets/seasnake-type-system.css"), "utf8");
 for (const token of [
