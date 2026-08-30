@@ -12,6 +12,7 @@ const requiredFiles = [
   "docs/seasnake-logo-preview.html",
   "docs/seasnake-ouroboros-concepts.html",
   "docs/logo-export-studio.html",
+  "docs/assets/seasnake-type-system.css",
   "docs/assets/logo-export-studio.css",
   "docs/assets/logo-export-studio.js",
   "docs/assets/gif-encoder.js",
@@ -70,6 +71,28 @@ for (const id of requiredControlIds) {
 }
 if (/\b(?:src|href)="https?:/i.test(exportPage)) {
   failures.push("export page must not depend on third-party runtime assets");
+}
+
+const brandManual = await readFile(path.join(docsRoot, "seasnake-ouroboros-concepts.html"), "utf8");
+if (!brandManual.includes('id="typography-system"')) {
+  failures.push("brand manual is missing the typography system chapter");
+}
+
+const typeSystem = await readFile(path.join(docsRoot, "assets/seasnake-type-system.css"), "utf8");
+for (const token of [
+  "--font-sans",
+  "--font-serif",
+  "--font-mono",
+  "--type-display-size",
+  "--type-h1-size",
+  "--type-h2-size",
+  "--type-h3-size",
+  "--type-h4-size",
+  "--type-h5-size",
+  "--type-lead-size",
+  "--type-body-size",
+]) {
+  if (!typeSystem.includes(token)) failures.push(`type system is missing token: ${token}`);
 }
 
 const masterSvgFiles = requiredFiles.filter((file) => file.includes("/logo-system/svg/") && file.endsWith(".svg"));

@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SEASNAKE VI System</title>
+    <link rel="stylesheet" href="assets/seasnake-type-system.css" />
     <style>
       :root {
         color-scheme: dark;
@@ -64,7 +65,7 @@
           radial-gradient(circle at 50% -8%, rgba(34, 198, 197, .2), transparent 38vw),
           linear-gradient(180deg, rgba(255, 255, 255, .06), transparent 520px),
           var(--black);
-        font-family: Inter, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-family: var(--font-sans);
       }
 
       body[data-mode="light"] {
@@ -649,16 +650,17 @@
 
       h1 {
         max-width: 9em;
-        font-size: clamp(44px, 6.6vw, 88px);
-        line-height: .92;
-        letter-spacing: 0;
+        font-size: var(--type-h1-size);
+        font-weight: 800;
+        line-height: var(--type-h1-leading);
+        letter-spacing: -.035em;
       }
 
       .lead {
         margin-top: 22px;
         color: var(--muted);
-        font-size: 16px;
-        line-height: 1.75;
+        font-size: var(--type-body-lg-size);
+        line-height: 1.8;
       }
 
       .hero-notes {
@@ -700,8 +702,10 @@
       }
 
       .section-head h2 {
-        font-size: clamp(26px, 3.8vw, 48px);
-        line-height: 1;
+        font-size: var(--type-h2-size);
+        font-weight: 760;
+        line-height: var(--type-h2-leading);
+        letter-spacing: -.025em;
       }
 
       .section-head p {
@@ -2816,6 +2820,147 @@
           <div class="standard-card"><b>颜色</b><span>正式输出只使用黑、白和三套角色色。不要在同一个标识内部混用三种角色色。</span></div>
           <div class="standard-card"><b>比例</b><span>横排组合中主三角标略高于字标；蛇形辅助标与主标同场时高度控制在 72%-82%。</span></div>
         </div>
+      </section>
+
+      <section class="section type-system" id="typography-system">
+        <div class="section-head">
+          <h2>字体系统</h2>
+          <p>字体承担品牌的理性秩序，也保留蛇的感知与叙事。无衬线负责标题、正文和界面；宋体只进入引言与引用；等宽字体用于参数、标签和技术信息。</p>
+        </div>
+
+        <div class="type-system-overview">
+          <article class="type-foundation-card sans" data-index="01">
+            <small>primary / sans</small>
+            <h3>Inter + 系统黑体</h3>
+            <p>品牌的主字体角色。英文优先 Inter，中文依次使用苹方与微软雅黑；用于 Display、H1–H5、正文、按钮和界面。</p>
+            <div class="type-alphabet">SEASNAKE 012345<br />潜行 · 感知 · 更新</div>
+          </article>
+          <article class="type-foundation-card serif" data-index="02">
+            <small>editorial / serif</small>
+            <h3>系统宋体</h3>
+            <p>叙事层字体。用于引言、短引用和章节开场；不用于按钮、长篇正文或数据界面，单次尽量控制在三行以内。</p>
+            <div class="type-alphabet">变化不是噪声，<br />而是留下路径的方式。</div>
+          </article>
+          <article class="type-foundation-card mono" data-index="03">
+            <small>data / mono</small>
+            <h3>SF Mono + Consolas</h3>
+            <p>技术与参数字体。用于 HEX、尺寸、时间、代码、编号和英文微标签；中文说明仍然回到主无衬线字体。</p>
+            <div class="type-alphabet">#D9F01A<br />1280×720 / 30FPS</div>
+          </article>
+        </div>
+
+        <article class="type-specimen-hero" aria-label="SEASNAKE 品牌标题示例">
+          <span class="type-specimen-kicker">SEASNAKE / PERSONAL IP / 001</span>
+          <div class="type-specimen-display ss-type-display">潜行于<br />变化之中</div>
+          <p class="type-specimen-subtitle ss-type-subtitle">Observe the current. Keep the form alive.<br />观察流动，让形态保持生命。</p>
+          <div class="type-specimen-meta"><span>Display 112 / 52</span><span>Weight 800</span><span>Leading 0.90</span><span>Tracking -0.045em</span></div>
+        </article>
+
+        <div class="type-scale" aria-label="SEASNAKE 字号层级表">
+          <header class="type-scale-header">
+            <div><small>responsive scale</small><strong>桌面 / 移动双尺度</strong></div>
+            <p>字号使用 clamp 在两个端点之间流动。桌面值适用于 1440px 视觉基准，移动值适用于 390px；正文以舒适阅读为先，不随屏幕无限缩小。</p>
+            <p>规格顺序：字号、字重、行高、字距。中文标题不要额外拉开字距，英文全大写标签才使用正字距。</p>
+          </header>
+
+          <div class="type-scale-row" data-level="display">
+            <div class="type-token"><b>品牌标题 / Display</b><code>--type-display-size</code></div>
+            <div class="type-scale-sample ss-type-display">潜行于变化之中</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>112 / 52 px</dd></div><div><dt>Weight</dt><dd>800</dd></div><div><dt>Leading</dt><dd>0.90</dd></div><div><dt>Tracking</dt><dd>-0.045em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row" data-level="h1">
+            <div class="type-token"><b>H1 / 页面主标题</b><code>--type-h1-size</code></div>
+            <div class="type-scale-sample ss-type-h1">三蛇视觉系统</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>80 / 44 px</dd></div><div><dt>Weight</dt><dd>800</dd></div><div><dt>Leading</dt><dd>0.96</dd></div><div><dt>Tracking</dt><dd>-0.035em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row" data-level="h2">
+            <div class="type-token"><b>H2 / 章节标题</b><code>--type-h2-size</code></div>
+            <div class="type-scale-sample ss-type-h2">感知与形态</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>56 / 34 px</dd></div><div><dt>Weight</dt><dd>760</dd></div><div><dt>Leading</dt><dd>1.05</dd></div><div><dt>Tracking</dt><dd>-0.025em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row" data-level="h3">
+            <div class="type-token"><b>H3 / 模块标题</b><code>--type-h3-size</code></div>
+            <div class="type-scale-sample ss-type-h3">青蓝树蟒</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>40 / 28 px</dd></div><div><dt>Weight</dt><dd>720</dd></div><div><dt>Leading</dt><dd>1.15</dd></div><div><dt>Tracking</dt><dd>-0.018em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>H4 / 卡片标题</b><code>--type-h4-size</code></div>
+            <div class="type-scale-sample ss-type-h4">动态视觉语言</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>28 / 22 px</dd></div><div><dt>Weight</dt><dd>700</dd></div><div><dt>Leading</dt><dd>1.30</dd></div><div><dt>Tracking</dt><dd>-0.005em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>H5 / 小标题</b><code>--type-h5-size</code></div>
+            <div class="type-scale-sample ss-type-h5">角色色使用原则</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>20 / 18 px</dd></div><div><dt>Weight</dt><dd>700</dd></div><div><dt>Leading</dt><dd>1.40</dd></div><div><dt>Tracking</dt><dd>0.01em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>副标题 / Subtitle</b><code>--type-subtitle-size</code></div>
+            <div class="type-scale-sample ss-type-subtitle">观察流动，让形态保持生命。</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>26 / 20 px</dd></div><div><dt>Weight</dt><dd>500</dd></div><div><dt>Leading</dt><dd>1.55</dd></div><div><dt>Tracking</dt><dd>0.005em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>引言 / Lead</b><code>--type-lead-size</code></div>
+            <div class="type-scale-sample ss-type-lead">变化不是噪声，而是留下路径的方式。</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>24 / 19 px</dd></div><div><dt>Weight</dt><dd>500</dd></div><div><dt>Leading</dt><dd>1.75</dd></div><div><dt>Tracking</dt><dd>0.02em</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>大正文 / Body L</b><code>--type-body-lg-size</code></div>
+            <div class="type-scale-sample ss-type-body-lg">三角主标负责正式识别，蛇形符号负责情绪和图案延展。</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>18 / 17 px</dd></div><div><dt>Weight</dt><dd>400</dd></div><div><dt>Leading</dt><dd>1.80</dd></div><div><dt>Tracking</dt><dd>0</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>正文 / Body</b><code>--type-body-size</code></div>
+            <div class="type-scale-sample ss-type-body">三套色系不只是配色，而是同一套 IP 在不同状态下的表达。</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>16 / 16 px</dd></div><div><dt>Weight</dt><dd>400</dd></div><div><dt>Leading</dt><dd>1.75</dd></div><div><dt>Tracking</dt><dd>0</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>辅助正文 / Body S</b><code>--type-body-sm-size</code></div>
+            <div class="type-scale-sample ss-type-body-sm">用于说明文字、卡片描述、次级信息和移动端辅助内容。</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>14 / 14 px</dd></div><div><dt>Weight</dt><dd>400</dd></div><div><dt>Leading</dt><dd>1.70</dd></div><div><dt>Tracking</dt><dd>0</dd></div></dl>
+          </div>
+
+          <div class="type-scale-row">
+            <div class="type-token"><b>标签 / Caption</b><code>--type-caption-size</code></div>
+            <div class="type-scale-sample ss-type-caption">Bamboo Viper / Primary State</div>
+            <dl class="type-scale-spec"><div><dt>Desktop / Mobile</dt><dd>12 / 12 px</dd></div><div><dt>Weight</dt><dd>750</dd></div><div><dt>Leading</dt><dd>1.40</dd></div><div><dt>Tracking</dt><dd>0.14em</dd></div></dl>
+          </div>
+        </div>
+
+        <div class="type-compositions">
+          <article class="type-composition editorial">
+            <small>editorial composition</small>
+            <blockquote class="ss-type-quote">“蛇没有固定的终点，只有不断更新的路径。”</blockquote>
+            <p class="ss-type-body">引言和短引用可以使用宋体，制造生物感与叙事停顿；后续说明立即回到无衬线正文，让内容保持清晰、克制和可持续阅读。</p>
+          </article>
+          <article class="type-composition interface">
+            <small>interface composition</small>
+            <div class="type-interface-panel">
+              <span class="ss-type-caption">ACTIVE FORM / 02</span>
+              <h3 class="ss-type-h4">竹叶青 · 本体状态</h3>
+              <p class="ss-type-body-sm">默认品牌角色，用于主状态、关键按钮、标题光感与正式视觉中的记忆点。</p>
+              <div class="type-interface-data ss-type-data"><span>#D9F01A</span><span>24 FPS</span><span>01:08</span></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="type-rules">
+          <article class="type-rule"><b>一屏一个主层级</b><p>Display 与 H1 不在同一视觉区域竞争；章节内从 H2 顺序向下，不为“更醒目”跳级。</p></article>
+          <article class="type-rule"><b>中文不强行拉字距</b><p>H1–H4 使用轻微负字距或默认字距。只有英文大写标签使用 0.14–0.18em 的正字距。</p></article>
+          <article class="type-rule"><b>正文控制行宽</b><p>中文正文建议每行约 28–38 个汉字，行高 1.70–1.80；避免大段居中排版。</p></article>
+          <article class="type-rule"><b>Logo 不用字体重打</b><p>SEASNAKE 专用字标始终调用 SVG 资产；这套字体系统只管理信息文字，不替代品牌 Logo。</p></article>
+        </div>
+
+        <a class="type-download" href="assets/seasnake-type-system.css" download>下载字体系统 CSS</a>
       </section>
 
       <section class="section" id="color-system">

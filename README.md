@@ -17,6 +17,7 @@ Pushes and pull requests run `.github/workflows/static-site-ci.yml`; successful 
 - `docs/seasnake-logo-preview.html` - animated VI entry page.
 - `docs/seasnake-ouroboros-concepts.html` - full brand manual.
 - `docs/logo-export-studio.html` - client-side batch recolor plus static and motion export studio.
+- `docs/assets/seasnake-type-system.css` - reusable SEASNAKE font stacks, responsive H1-H5 scale, body, lead, caption, and data type tokens.
 - `docs/assets/logo-export-studio.js` - SVG recoloring, high-resolution PNG rasterization, and dependency-free ZIP packaging.
 - `docs/assets/logo-motion-export.js` - browser-native MANUAL arrival and dynamic VI MP4 / WebM / GIF export.
 - `docs/assets/gif-encoder.js` - dependency-free GIF encoding with a temporally stable shared palette and brand-color anchors.
@@ -31,6 +32,7 @@ Pushes and pull requests run `.github/workflows/static-site-ci.yml`; successful 
 - Day mode uses explicit dark ink for key logos and text so mobile browsers do not wash the marks out through filter or transparency compositing.
 - The manual keeps color switching live: active navigation, atmosphere panels, and banner details follow the selected role.
 - The color and three-serpent story live together in the `三蛇色系` chapter.
+- The brand manual includes a complete `字体系统` chapter; its screen scale and reusable CSS tokens live in `docs/assets/seasnake-type-system.css`.
 
 ## Asset Notes
 
